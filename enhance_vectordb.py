@@ -5,6 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import threading
 import logging
 
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 class EnhancedVectorDatabase:

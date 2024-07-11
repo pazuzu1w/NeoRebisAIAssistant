@@ -1,8 +1,8 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget
+from PyQt6.QtWidgets import QApplication
 from dotenv import load_dotenv
-from gui import App
-from vectordb import VectorDatabase
+from Gui import App
+from enhance_vectordb import EnhancedVectorDatabase
 import logging
 
 logger = logging.getLogger(__name__)

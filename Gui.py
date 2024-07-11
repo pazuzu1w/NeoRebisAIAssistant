@@ -1,8 +1,7 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QTextEdit, \
-    QComboBox, QLabel, QColorDialog, QFontDialog
+    QComboBox, QLabel, QColorDialog, QFontDialog, QSlider
 from PyQt6.QtGui import QFont, QColor
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
-from pywin.framework.app import App
 
 from model import init_model, send_message_async, get_available_models, DEFAULT_MODEL
 from dotenv import load_dotenv
@@ -11,9 +10,7 @@ from user_profile import UserProfile
 from personality_system import PersonalityManager
 import os
 
-
 load_dotenv()
-
 
 class ChatWorker(QThread):
     finished = pyqtSignal(str)
@@ -52,7 +49,6 @@ class ChatWorker(QThread):
             self.finished.emit(response.text)
         except Exception as e:
             self.error.emit(str(e))
-
 
 class App(QWidget):
     def __init__(self):
@@ -126,13 +122,59 @@ class App(QWidget):
         customize_layout.addWidget(self.font_button)
         layout.addLayout(customize_layout)
 
-        # Inside the App class, modify the initUI method to add the Apply System Prompt button
+        # Apply System Prompt button
         self.apply_system_prompt_button = QPushButton("Apply System Prompt")
         self.apply_system_prompt_button.clicked.connect(self.apply_system_prompt)
         layout.addWidget(self.apply_system_prompt_button)
 
+        # Add UI elements for user profile and personality
+        self.add_profile_ui()
+        self.add_personality_ui()
 
         self.update_colors()
+
+    def add_profile_ui(self):
+        profile_layout = QVBoxLayout()
+        profile_layout.addWidget(QLabel("User Preferences"))
+
+        # Add preference inputs (e.g., communication style, interests)
+        self.pref_inputs = {}
+        for pref in ["communication_style", "interests"]:
+            pref_layout = QHBoxLayout()
+            pref_layout.addWidget(QLabel(pref.replace("_", " ").title()))
+            pref_input = QLineEdit()
+            pref_input.setText(self.user_profile.get_preference(pref, ""))
+            pref_input.textChanged.connect(lambda text, p=pref: self.update_preference(p, text))
+            self.pref_inputs[pref] = pref_input
+            pref_layout.addWidget(pref_input)
+            profile_layout.addLayout(pref_layout)
+
+        self.layout().addLayout(profile_layout)
+
+    def add_personality_ui(self):
+        personality_layout = QVBoxLayout()
+        personality_layout.addWidget(QLabel("AI Personality Traits"))
+
+        # Add sliders for each personality trait
+        self.trait_sliders = {}
+        for trait in ["formality", "humor", "empathy", "creativity", "assertiveness"]:
+            trait_layout = QHBoxLayout()
+            trait_layout.addWidget(QLabel(trait.title()))
+            slider = QSlider(Qt.Orientation.Horizontal)
+            slider.setRange(0, 100)
+            slider.setValue(int(self.personality_manager.personality.get_trait(trait) * 100))
+            slider.valueChanged.connect(lambda value, t=trait: self.update_personality_trait(t, value / 100))
+            self.trait_sliders[trait] = slider
+            trait_layout.addWidget(slider)
+            personality_layout.addLayout(trait_layout)
+
+        self.layout().addLayout(personality_layout)
+
+    def update_preference(self, preference, value):
+        self.user_profile.update_preference(preference, value)
+
+    def update_personality_trait(self, trait, value):
+        self.personality_manager.update_personality(trait, value)
 
     def update_model_dropdown(self):
         models = get_available_models()
@@ -147,8 +189,7 @@ class App(QWidget):
         self.initialize_model_and_chat(model_name)
 
     def on_system_prompt_changed(self):
-        if self.model:
-            self.initialize_model_and_chat(self.model_dropdown.currentText())
+        pass  # We'll apply the system prompt only when the button is clicked
 
     def initialize_model_and_chat(self, model_name):
         system_prompt = self.system_prompt_input.text()
@@ -171,13 +212,6 @@ class App(QWidget):
 
     def handle_error(self, error_message):
         self.display_message(f"Error: {error_message}", "System")
-
-    def closeEvent(self, event):
-        self.vectordb.close()
-        super().closeEvent(event)
-
-
-
 
     def process_response(self, response_text):
         self.display_message(response_text, "Codebro")
@@ -240,22 +274,11 @@ class App(QWidget):
         """
         self.setStyleSheet(style_sheet)
 
-    # Add the apply_system_prompt method to handle the button click
     def apply_system_prompt(self):
         if self.model_dropdown.currentText():
             self.initialize_model_and_chat(self.model_dropdown.currentText())
 
-    # Modify the on_system_prompt_changed method to remove the automatic re-initialization
-    def on_system_prompt_changed(self):
-        pass  # Now, this method can be used for validation or other purposes without re-initializing the model
-
-        def closeEvent(self, event):
-            self.vectordb.close()
-            self.user_profile.save_profile()
-            super().closeEvent(event)
-
-    if __name__ == '__main__':
-        app = QApplication([])
-        ex = App()
-        ex.show()
-        app.exec()
+    def closeEvent(self, event):
+        self.vectordb.close()
+        self.user_profile.save_profile()
+        super().closeEvent(event)
