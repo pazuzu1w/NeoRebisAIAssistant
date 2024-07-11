@@ -4,6 +4,7 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import threading
 import logging
+import os
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -12,7 +13,8 @@ class EnhancedVectorDatabase:
     _local = threading.local()
 
     def __init__(self, db_path='enhanced_chatbot.db'):
-        self.db_path = db_path
+        self.db_path = os.path.abspath(db_path)
+        logger.info(f"Database path: {self.db_path}")
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
 
     def get_connection(self):
@@ -59,6 +61,7 @@ class EnhancedVectorDatabase:
             similarity = cosine_similarity([query_embedding], [db_embedding])[0][0]
             results.append((row[0], row[1], similarity))
         results.sort(key=lambda x: x[2], reverse=True)
+        logger.info(f"Found {len(results)} similar messages")
         return results[:top_k]
 
     def add_summary(self, summary, start_time, end_time):

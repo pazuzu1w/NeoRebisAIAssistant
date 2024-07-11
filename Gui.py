@@ -54,7 +54,7 @@ class App(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Neo Rebis Interface")
-        self.vectordb = EnhancedVectorDatabase('neo_rebis.db')
+        self.vectordb = EnhancedVectorDatabase('enhanced_chatbot.db')
         self.user_profile = UserProfile("default_user")
         self.personality_manager = PersonalityManager()
 
