@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="">
+    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="date time added to messages to give bot sense of time">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/Gui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/enhance_vectordb.py" beforeDir="false" afterPath="$PROJECT_DIR$/enhance_vectordb.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,7 +170,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720872112577</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="date time added to messages to give bot sense of time">
+      <option name="closed" value="true" />
+      <created>1720888287486</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1720888287487</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -181,6 +190,7 @@
     <MESSAGE value="tts added" />
     <MESSAGE value="logging added" />
     <MESSAGE value="user initiated log search added" />
-    <option name="LAST_COMMIT_MESSAGE" value="user initiated log search added" />
+    <MESSAGE value="date time added to messages to give bot sense of time" />
+    <option name="LAST_COMMIT_MESSAGE" value="date time added to messages to give bot sense of time" />
   </component>
 </project>

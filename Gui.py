@@ -3,10 +3,10 @@ from idlelib.search import SearchDialog
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QTextEdit, \
     QComboBox, QLabel, QColorDialog, QFontDialog, QSlider, QDialog, QDialogButtonBox, QCheckBox, QMessageBox
 from PyQt6.QtGui import QFont, QColor
-from PyQt6.QtCore import Qt, QThread, pyqtSignal, QLocale
+from PyQt6.QtCore import Qt, QThread, pyqtSignal, QLocale, QTimer
 from model import init_model, send_message_async, get_available_models, DEFAULT_MODEL
 from dotenv import load_dotenv
-from enhance_vectordb import EnhancedVectorDatabase
+from enhance_vectordb import EnhancedVectorDatabase, logger
 from user_profile import UserProfile
 from personality_system import PersonalityManager
 import os
@@ -120,6 +120,27 @@ class ChatWorker(QThread):
             self.error.emit(str(e))
 
 
+class SummaryWorker(QThread):
+    summary_created = pyqtSignal(str)
+    error_occurred = pyqtSignal(str)
+
+    def __init__(self, vectordb):
+        super().__init__()
+        self.vectordb = vectordb
+
+    def run(self):
+        try:
+            summary = self.vectordb.create_conversation_summary()
+            if summary:
+                self.summary_created.emit(summary)
+            else:
+                self.summary_created.emit("")
+        except Exception as e:
+            self.error_occurred.emit(str(e))
+
+
+
+
 class App(QWidget):
 
     DEFAULT_SYSTEM_PROMPT = "You are an AI assistant. Please be helpful and polite."
@@ -156,6 +177,15 @@ class App(QWidget):
 
         # Initialize with default model
         self.initialize_model_and_chat(self.current_model, self.system_prompt)
+
+
+        # Set up periodic summary creation
+        self.summary_timer = QTimer(self)
+        self.summary_timer.timeout.connect(self.start_summary_creation)
+        self.summary_timer.start(300000)  # Create summary every 5 minutes
+
+        # Initialize summary worker
+        self.summary_worker = None
 
     def initUI(self):
         main_layout = QVBoxLayout()
@@ -360,10 +390,32 @@ class App(QWidget):
         """
         self.setStyleSheet(style_sheet)
 
+    def start_summary_creation(self):
+        if self.summary_worker is None or not self.summary_worker.isRunning():
+            self.summary_worker = SummaryWorker(self.vectordb)
+            self.summary_worker.summary_created.connect(self.on_summary_created)
+            self.summary_worker.error_occurred.connect(self.on_summary_error)
+            self.summary_worker.start()
+
+    def on_summary_created(self, summary):
+        if summary:
+            self.display_message("Created new conversation summary.", "System")
+            logger.info(f"New conversation summary created: {summary[:100]}...")  # Log first 100 chars
+        else:
+            logger.info("No new messages to summarize.")
+
+    def on_summary_error(self, error):
+        logger.error(f"Error creating periodic summary: {error}")
+        self.display_message(f"Error creating summary: {error}", "System")
+
     def initialize_model_and_chat(self, model_name, system_prompt=""):
         if not system_prompt:
             system_prompt = self.DEFAULT_SYSTEM_PROMPT
         try:
+            latest_summary = self.vectordb.get_latest_conversation_summary()
+            if latest_summary:
+                system_prompt += f"\n\nLatest conversation summary: {latest_summary}"
+
             self.chat = init_model(model_name, system_prompt)
             if self.chat:
                 self.display_message("Model initialized! Let's chat!", "System")
@@ -373,6 +425,8 @@ class App(QWidget):
             self.display_message(f"Error initializing model: {str(e)}", "System")
 
     def closeEvent(self, event):
+        if self.summary_worker and self.summary_worker.isRunning():
+            self.summary_worker.wait()
         self.vectordb.close()
         self.user_profile.save_profile()
         self.log_manager.log_message("System", "Application closed")

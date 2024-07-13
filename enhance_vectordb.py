@@ -16,6 +16,15 @@ logger = logging.getLogger(__name__)
 class EnhancedVectorDatabase:
     _local = threading.local()
 
+
+
+    def __init__(self, db_path='enhanced_chatbot.db'):
+        self.db_path = os.path.abspath(db_path)
+        logger.info(f"Database path: {self.db_path}")
+        self.model = SentenceTransformer('all-MiniLM-L6-v2')
+        self.bart_model = BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn')
+        self.bart_tokenizer = BartTokenizer.from_pretrained('facebook/bart-large-cnn')
+
     def semantic_search(self, query, k=5):
         query_embedding = self.model.encode([query])[0]
 
@@ -44,10 +53,6 @@ class EnhancedVectorDatabase:
 
         return results
 
-    def __init__(self, db_path='enhanced_chatbot.db'):
-        self.db_path = os.path.abspath(db_path)
-        logger.info(f"Database path: {self.db_path}")
-        self.model = SentenceTransformer('all-MiniLM-L6-v2')
 
     def get_connection(self):
         if not hasattr(self._local, 'conn'):
@@ -74,14 +79,61 @@ class EnhancedVectorDatabase:
                 end_time DATETIME NOT NULL
             )
         ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS conversation_summaries (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                summary TEXT NOT NULL,
+                embedding BLOB NOT NULL,
+                start_time DATETIME NOT NULL,
+                end_time DATETIME NOT NULL
+            )
+        ''')
         self.get_connection().commit()
-
     def add_message(self, text):
         embedding = self.model.encode([text])[0]
         cursor = self.get_connection().cursor()
         cursor.execute('INSERT INTO messages (text, embedding) VALUES (?, ?)',
                        (text, embedding.tobytes()))
         self.get_connection().commit()
+
+    def create_conversation_summary(self, max_messages=100):
+        cursor = self.get_connection().cursor()
+        cursor.execute('SELECT text, timestamp FROM messages ORDER BY timestamp DESC LIMIT ?', (max_messages,))
+        messages = cursor.fetchall()
+
+        if not messages:
+            return None
+
+        # Combine messages into a single text
+        conversation_text = " ".join([msg[0] for msg in messages])
+
+        # Use BART to create a summary
+        inputs = self.bart_tokenizer([conversation_text], max_length=1024, return_tensors='pt', truncation=True)
+        summary_ids = self.bart_model.generate(inputs['input_ids'], num_beams=4, max_length=150, early_stopping=True)
+        summary = self.bart_tokenizer.decode(summary_ids[0], skip_special_tokens=True)
+
+        # Get start and end times
+        start_time = messages[-1][1]  # Oldest message
+        end_time = messages[0][1]  # Newest message
+
+        # Store the summary
+        self.add_conversation_summary(summary, start_time, end_time)
+
+        return summary
+
+    def add_conversation_summary(self, summary, start_time, end_time):
+        embedding = self.model.encode([summary])[0]
+        cursor = self.get_connection().cursor()
+        cursor.execute(
+            'INSERT INTO conversation_summaries (summary, embedding, start_time, end_time) VALUES (?, ?, ?, ?)',
+            (summary, embedding.tobytes(), start_time, end_time))
+        self.get_connection().commit()
+
+    def get_latest_conversation_summary(self):
+        cursor = self.get_connection().cursor()
+        cursor.execute('SELECT summary FROM conversation_summaries ORDER BY end_time DESC LIMIT 1')
+        result = cursor.fetchone()
+        return result[0] if result else None
 
     def create_summary(self, messages, method="tfidf", num_sentences=3):
         if method == "tfidf":
