@@ -182,7 +182,7 @@ class App(QWidget):
         # Set up periodic summary creation
         self.summary_timer = QTimer(self)
         self.summary_timer.timeout.connect(self.start_summary_creation)
-        self.summary_timer.start(300000)  # Create summary every 5 minutes
+        self.summary_timer.start(500000)  # Create summary every 5 minutes
 
         # Initialize summary worker
         self.summary_worker = None
@@ -401,6 +401,11 @@ class App(QWidget):
         if summary:
             self.display_message("Created new conversation summary.", "System")
             logger.info(f"New conversation summary created: {summary[:100]}...")  # Log first 100 chars
+            self.worker = ChatWorker(self.chat, summary, self.vectordb, self.user_profile,
+                                     self.personality_manager)
+            self.worker.finished.connect(self.process_response)
+            self.worker.error.connect(self.handle_error)
+            self.worker.start()
         else:
             logger.info("No new messages to summarize.")
 
@@ -414,11 +419,16 @@ class App(QWidget):
         try:
             latest_summary = self.vectordb.get_latest_conversation_summary()
             if latest_summary:
-                system_prompt += f"\n\nLatest conversation summary: {latest_summary}"
+                summary_prompt = f"\n\nLatest conversation summary: {latest_summary}"
 
             self.chat = init_model(model_name, system_prompt)
             if self.chat:
                 self.display_message("Model initialized! Let's chat!", "System")
+                self.worker = ChatWorker(self.chat, summary_prompt, self.vectordb, self.user_profile,
+                                         self.personality_manager)
+                self.worker.finished.connect(self.process_response)
+                self.worker.error.connect(self.handle_error)
+                self.worker.start()
             else:
                 self.display_message("Error initializing model. Check console.", "System")
         except Exception as e:
