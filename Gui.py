@@ -261,14 +261,16 @@ class App(QWidget):
         self.initialize_model_and_chat(self.current_model, self.system_prompt)
         self.display_message("System prompt updated!", "System")
 
-
     def send_message(self):
         message = self.input_text.toPlainText()
         self.input_text.clear()
         if message and self.chat:
-            self.display_message(message, "You")
-            self.log_manager.log_message("You", message)
-            self.worker = ChatWorker(self.chat, message, self.vectordb, self.user_profile, self.personality_manager)
+            current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            timestamped_message = f"[{current_time}] {message}"
+            self.display_message(timestamped_message, "You")
+            self.log_manager.log_message("You", timestamped_message)
+            self.worker = ChatWorker(self.chat, timestamped_message, self.vectordb, self.user_profile,
+                                     self.personality_manager)
             self.worker.finished.connect(self.process_response)
             self.worker.error.connect(self.handle_error)
             self.worker.start()
@@ -279,14 +281,15 @@ class App(QWidget):
     def toggle_speak_aloud(self, state):
         self.speak_aloud = bool(state)
 
-
-
-
     def process_response(self, response_text):
-        self.display_message(response_text, "Gemini")
-        self.log_manager.log_message("Gemini", response_text)
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        timestamped_response = f"[{current_time}] {response_text}"
+        self.display_message(timestamped_response, "Gemini")
+        self.log_manager.log_message("Gemini", timestamped_response)
         if self.speak_aloud:
-            self.speech_worker.add_text(response_text)
+            self.speech_worker.add_text(response_text)  # Note: We don't include the timestamp in the spoken text
+
+
     def on_speech_finished(self):
         print("Speech completed")
 
