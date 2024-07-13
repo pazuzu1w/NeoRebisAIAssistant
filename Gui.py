@@ -210,15 +210,19 @@ class App(QWidget):
         input_layout.addWidget(self.send_button)
         main_layout.addLayout(input_layout)
 
+        button_layout = QHBoxLayout()
+
         # --- Options Button ---
         options_button = QPushButton("Options")
         options_button.clicked.connect(self.show_options_dialog)
-        main_layout.addWidget(options_button)
+        button_layout.addWidget(options_button)
 
         # ---- Search Button ----
         self.search_button = QPushButton("Search Logs")
         self.search_button.clicked.connect(self.show_search_dialog)
-        main_layout.addWidget(self.search_button)
+        button_layout.addWidget(self.search_button)
+
+        main_layout.addLayout(button_layout)
 
         self.update_colors()
 
@@ -249,7 +253,7 @@ class App(QWidget):
                     self.display_message(f"Similarity: {result['similarity']:.2f} - {result['content']}", "VectorDB")
 
             # Prepare context for the bot
-            context = f"The user searched for '{query}'. Here are the relevant results:\n"
+            context = f"Tony searched for '{query}'. Here are the relevant results:\n"
             context += "Log results:\n" + "\n".join(log_results[:5]) + "\n"
             context += "Vector DB results:\n" + "\n".join(
                 [f"{r['similarity']:.2f} - {r['content']}" for r in vector_results])
