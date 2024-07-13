@@ -7,7 +7,9 @@
     <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="personality sliders and user preferences added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/Gui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/enhance_vectordb.py" beforeDir="false" afterPath="$PROJECT_DIR$/enhance_vectordb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +49,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.Gui.executor&quot;: &quot;Run&quot;,
     &quot;Python.enhance_vectordb.executor&quot;: &quot;Run&quot;,
     &quot;Python.gui.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
@@ -64,6 +67,7 @@
     <option name="myCommands">
       <command value="pip install sentence-transformers" />
       <command value="pip install sentence-transformers scikit-learn" />
+      <command value="pip install transformers" />
     </option>
   </component>
   <component name="SharedIndexes">
@@ -98,7 +102,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720670695718</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="personality sliders and user preferences added">
+      <option name="closed" value="true" />
+      <created>1720673715603</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1720673715603</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

@@ -2,6 +2,10 @@ import sqlite3
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer
+from transformers import BartForConditionalGeneration, BartTokenizer
+from summa import summarizer
+from sklearn.cluster import KMeans
 import threading
 import logging
 import os
@@ -50,6 +54,65 @@ class EnhancedVectorDatabase:
         cursor.execute('INSERT INTO messages (text, embedding) VALUES (?, ?)',
                        (text, embedding.tobytes()))
         self.get_connection().commit()
+
+    def create_summary(self, messages, method="tfidf", num_sentences=3):
+        if method == "tfidf":
+            return self.create_summary_tfidf(messages, num_sentences)
+        elif method == "textrank":
+            return self.create_summary_text_rank(messages, num_sentences)
+        elif method == "bart":
+            return self.create_summary_bart(messages, num_sentences)
+        elif method == "clustering":
+            return self.create_summary_clustering(messages, num_sentences)
+        else:
+            raise ValueError("Unsupported summarization method")
+
+
+
+    def create_summary_tfidf(self, messages, num_sentences=3):
+
+        text = " ".join(messages)
+        sentences = text.split('. ')
+        vectorizer = TfidfVectorizer().fit_transform(sentences)
+        vectors = vectorizer.toarray()
+        cosine_matrix = cosine_similarity(vectors)
+        scores = cosine_matrix.sum(axis=1)
+        ranked_sentences = [sentences[i] for i in np.argsort(scores, axis=0)[::-1]]
+        summary = ". ".join(ranked_sentences[:num_sentences])
+        return summary
+
+
+    def create_summary_text_rank(self, messages, num_sentences=3):
+        text = " ".join(messages)
+        summary = summarizer.summarize(text, words=50)
+        return summary
+
+
+    def create_summary_bart(self, messages, num_sentences=3):
+        model_name = 'facebook/bart-large-cnn'
+        model = BartForConditionalGeneration.from_pretrained(model_name)
+        tokenizer = BartTokenizer.from_pretrained(model_name)
+        text = " ".join(messages)
+        inputs = tokenizer([text], max_length=1024, return_tensors='pt', truncation=True)
+        summary_ids = model.generate(inputs['input_ids'], num_beams=4, max_length=1024, early_stopping=True)
+        summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
+        return summary
+
+
+
+    def create_summary_clustering(self, messages, num_sentences=3):
+        text = " ".join(messages)
+        sentences = text.split('. ')
+        vectorizer = TfidfVectorizer().fit_transform(sentences)
+        vectors = vectorizer.toarray()
+        kmeans = KMeans(n_clusters=num_sentences, random_state=0).fit(vectors)
+        cluster_centers = kmeans.cluster_centers_
+        closest = np.argsort(cosine_similarity(cluster_centers, vectors), axis=1)
+        summary = ". ".join([sentences[i] for i in closest[:, -1]])
+        return summary
+
+
+
 
     def search_similar(self, query, top_k=5):
         query_embedding = self.model.encode([query])[0]

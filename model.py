@@ -6,8 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DEFAULT_MODEL = "models/gemini-pro"
-
+DEFAULT_MODEL = "models/gemini-1.5-pro-latest"
 
 def get_available_models():
     try:
@@ -39,7 +38,7 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=None):
 
         model = genai.GenerativeModel(
             model_name=model_name,
-            safety_settings=safety_settings
+            safety_settings=safety_settings,
         )
 
         chat = model.start_chat(history=[])
