@@ -21,7 +21,7 @@ def get_available_models():
         return [DEFAULT_MODEL]
 
 
-def init_model(model_name=DEFAULT_MODEL, system_prompt=None):
+def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
     try:
         api_key = os.getenv('API_KEY')
         if not api_key:
@@ -36,14 +36,21 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=None):
             HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE
         }
 
+        generation_config = {
+            "temperature": 0.9,
+            "top_p": 1,
+            "top_k": 1,
+            "max_output_tokens": 2048,
+        }
+
         model = genai.GenerativeModel(
             model_name=model_name,
             safety_settings=safety_settings,
+            generation_config=generation_config,
+            system_instruction=system_prompt
         )
 
         chat = model.start_chat(history=[])
-        if system_prompt:
-            chat.send_message(system_prompt)
 
         print(f"Model '{model_name}' initialized successfully! 🔥")
         return chat
@@ -51,7 +58,6 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=None):
     except Exception as e:
         print(f"Model initialization failed: {e}")
         return None
-
 
 def send_message_async(chat, message):
     try:

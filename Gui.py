@@ -53,6 +53,9 @@ class ChatWorker(QThread):
 
 
 class App(QWidget):
+
+    DEFAULT_SYSTEM_PROMPT = "You are an AI assistant. Please be helpful and polite."
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Neo Rebis Interface")
@@ -71,12 +74,12 @@ class App(QWidget):
         self.chat = None
 
         self.current_model = DEFAULT_MODEL
-        self.system_prompt = ""
+        self.system_prompt = self.DEFAULT_SYSTEM_PROMPT
 
         self.initUI()
 
         # Initialize with default model
-        self.initialize_model_and_chat(DEFAULT_MODEL)
+        self.initialize_model_and_chat(self.current_model, self.system_prompt)
 
     def initUI(self):
         main_layout = QVBoxLayout()
@@ -205,10 +208,9 @@ class App(QWidget):
         """
         self.setStyleSheet(style_sheet)
 
-
-
-
     def initialize_model_and_chat(self, model_name, system_prompt=""):
+        if not system_prompt:
+            system_prompt = self.DEFAULT_SYSTEM_PROMPT
         try:
             self.chat = init_model(model_name, system_prompt)
             if self.chat:
@@ -217,7 +219,6 @@ class App(QWidget):
                 self.display_message("Error initializing model. Check console.", "System")
         except Exception as e:
             self.display_message(f"Error initializing model: {str(e)}", "System")
-
 
     def closeEvent(self, event):
         self.vectordb.close()
