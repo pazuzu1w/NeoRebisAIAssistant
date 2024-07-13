@@ -1,5 +1,7 @@
+from idlelib.search import SearchDialog
+
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QTextEdit, \
-    QComboBox, QLabel, QColorDialog, QFontDialog, QSlider, QDialog, QDialogButtonBox, QCheckBox
+    QComboBox, QLabel, QColorDialog, QFontDialog, QSlider, QDialog, QDialogButtonBox, QCheckBox, QMessageBox
 from PyQt6.QtGui import QFont, QColor
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QLocale
 from model import init_model, send_message_async, get_available_models, DEFAULT_MODEL
@@ -13,6 +15,23 @@ import pyttsx3
 import threading
 
 load_dotenv()
+
+
+class SearchDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Search Logs")
+        self.layout = QVBoxLayout()
+
+        self.search_input = QLineEdit()
+        self.search_input.setPlaceholderText("Enter search query...")
+        self.layout.addWidget(self.search_input)
+
+        self.search_button = QPushButton("Search")
+        self.search_button.clicked.connect(self.accept)
+        self.layout.addWidget(self.search_button)
+
+        self.setLayout(self.layout)
 
 
 class LogManager:
@@ -46,6 +65,20 @@ class LogManager:
             log_entry = f"\n[{timestamp}] {sender}: {message}\n"
             with open(self.current_log_file, 'a', encoding='utf-8') as f:
                 f.write(log_entry)
+
+    def search_logs(self, query):
+        results = []
+        try:
+            for filename in os.listdir(self.log_dir):
+                if filename.endswith(".log"):
+                    with open(os.path.join(self.log_dir, filename), 'r', encoding='utf-8') as f:
+                        for line in f:
+                            if query.lower() in line.lower():
+                                results.append(line.strip())
+        except Exception as e:
+            print(f"Error searching logs: {e}")
+        return results
+
 
 
 class ChatWorker(QThread):
@@ -152,7 +185,53 @@ class App(QWidget):
         options_button.clicked.connect(self.show_options_dialog)
         main_layout.addWidget(options_button)
 
+        # ---- Search Button ----
+        self.search_button = QPushButton("Search Logs")
+        self.search_button.clicked.connect(self.show_search_dialog)
+        main_layout.addWidget(self.search_button)
+
         self.update_colors()
+
+    def show_search_dialog(self):
+        try:
+            dialog = SearchDialog(self)
+            if dialog.exec() == QDialog.DialogCode.Accepted:
+                query = dialog.search_input.text()
+                self.perform_search(query)
+        except Exception as e:
+            self.show_error_message(f"Error opening search dialog: {e}")
+
+    def perform_search(self, query):
+        try:
+            results = self.log_manager.search_logs(query)
+            if results:
+                self.display_message(f"Search results for '{query}':", "System")
+                for result in results:
+                    self.display_message(result, "Log")
+
+                # Prepare context for the bot
+                context = f"The user searched for '{query}' in the logs. Here are the relevant results:\n"
+                context += "\n".join(results[:5])  # Limit to first 5 results to avoid overwhelming the bot
+                context += "\nBased on these search results, please provide a summary or answer any questions the user might have."
+
+                # Send context to the bot for processing
+                if self.chat:
+                    self.worker = ChatWorker(self.chat, context, self.vectordb, self.user_profile,
+                                             self.personality_manager)
+                    self.worker.finished.connect(self.process_response)
+                    self.worker.error.connect(self.handle_error)
+                    self.worker.start()
+                else:
+                    self.show_error_message("Chat model not initialized. Please check your configuration.")
+            else:
+                self.display_message(f"No results found for '{query}'", "System")
+        except Exception as e:
+            self.show_error_message(f"Error performing search: {e}")
+
+    def show_error_message(self, message):
+        QMessageBox.critical(self, "Error", message)
+        print(f"Error: {message}")
+
 
     def show_options_dialog(self):
         try:

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="tts added">
+    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="logging added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/Gui.py" afterDir="false" />
     </list>
@@ -44,23 +44,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Gui.executor": "Run",
-    "Python.enhance_vectordb.executor": "Run",
-    "Python.gui.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.model.executor": "Run",
-    "Python.pathex.executor": "Run",
-    "Python.tDtRefactor.executor": "Run",
-    "Python.test.executor": "Run",
-    "Python.vectordb.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/pazuz/PycharmProjects/game1/tDtRefactor.py"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Gui.executor&quot;: &quot;Run&quot;,
+    &quot;Python.enhance_vectordb.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gui.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.model.executor&quot;: &quot;Run&quot;,
+    &quot;Python.pathex.executor&quot;: &quot;Run&quot;,
+    &quot;Python.tDtRefactor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.vectordb.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/pazuz/PycharmProjects/game1/tDtRefactor.py&quot;
   }
-}]]></component>
+}</component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="pip install sentence-transformers" />
@@ -153,7 +153,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720869469284</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="logging added">
+      <option name="closed" value="true" />
+      <created>1720870168846</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1720870168846</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -163,6 +171,7 @@
     <MESSAGE value="system prompt fixed and system config added in source" />
     <MESSAGE value="fixed display message message formatting" />
     <MESSAGE value="tts added" />
-    <option name="LAST_COMMIT_MESSAGE" value="tts added" />
+    <MESSAGE value="logging added" />
+    <option name="LAST_COMMIT_MESSAGE" value="logging added" />
   </component>
 </project>
