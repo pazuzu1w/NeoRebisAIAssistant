@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="gui elements refactored to seperate options screen">
+    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="fixed display message message formatting">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/Gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,27 +44,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.Gui.executor&quot;: &quot;Run&quot;,
-    &quot;Python.enhance_vectordb.executor&quot;: &quot;Run&quot;,
-    &quot;Python.gui.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.model.executor&quot;: &quot;Run&quot;,
-    &quot;Python.tDtRefactor.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.vectordb.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/pazuz/PycharmProjects/game1/tDtRefactor.py&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Gui.executor": "Run",
+    "Python.enhance_vectordb.executor": "Run",
+    "Python.gui.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.model.executor": "Run",
+    "Python.pathex.executor": "Run",
+    "Python.tDtRefactor.executor": "Run",
+    "Python.test.executor": "Run",
+    "Python.vectordb.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/pazuz/PycharmProjects/game1/tDtRefactor.py"
   }
-}</component>
+}]]></component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="pip install sentence-transformers" />
       <command value="pip install sentence-transformers scikit-learn" />
       <command value="pip install transformers" />
+      <command value="pyinstaller --onefile --add-data &quot;.env;.&quot; Main.py" />
+      <command value="pip install transformers -u" />
+      <command value="pip install transformers-u" />
+      <command value="python.exe -m pip install --upgrade pip" />
+      <command value="pip install transformers -U" />
     </option>
   </component>
   <component name="SharedIndexes">
@@ -116,13 +121,39 @@
       <option name="project" value="LOCAL" />
       <updated>1720849251273</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="system prompt fixed and system config added in source">
+      <option name="closed" value="true" />
+      <created>1720853952648</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1720853952648</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fixed display message message formatting">
+      <option name="closed" value="true" />
+      <created>1720854334845</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1720854334845</updated>
+    </task>
+    <task id="LOCAL-00007" summary="fixed display message message formatting">
+      <option name="closed" value="true" />
+      <created>1720854390793</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1720854390793</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
     <MESSAGE value="personality sliders and user preferences added" />
     <MESSAGE value="gui elements refactored to seperate options screen" />
-    <option name="LAST_COMMIT_MESSAGE" value="gui elements refactored to seperate options screen" />
+    <MESSAGE value="system prompt fixed and system config added in source" />
+    <MESSAGE value="fixed display message message formatting" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed display message message formatting" />
   </component>
 </project>

@@ -1,17 +1,17 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QTextEdit, \
-    QComboBox, QLabel, QColorDialog, QFontDialog, QSlider, QDialog, QDialogButtonBox
+    QComboBox, QLabel, QColorDialog, QFontDialog, QSlider, QDialog, QDialogButtonBox, QCheckBox
 from PyQt6.QtGui import QFont, QColor
-from PyQt6.QtCore import Qt, QThread, pyqtSignal
-
+from PyQt6.QtCore import Qt, QThread, pyqtSignal, QLocale
+from PyQt6.QtTextToSpeech import QTextToSpeech
 from model import init_model, send_message_async, get_available_models, DEFAULT_MODEL
 from dotenv import load_dotenv
 from enhance_vectordb import EnhancedVectorDatabase
 from user_profile import UserProfile
 from personality_system import PersonalityManager
 import os
+import pyttsx3
 
 load_dotenv()
-
 
 class ChatWorker(QThread):
     finished = pyqtSignal(str)
@@ -70,6 +70,12 @@ class App(QWidget):
 
         # Font Customization
         self.font = QFont("JetBrains Mono", 14)
+
+        self.speak_aloud = False
+
+        self.speech_worker = SpeechWorker(self)
+        self.speech_worker.finished.connect(self.on_speech_finished)
+        self.speech_worker.error.connect(self.on_speech_error)
 
         self.chat = None
 
@@ -145,12 +151,29 @@ class App(QWidget):
     def handle_error(self, error_message):
         self.display_message(f"Error: {error_message}", "System")
 
+    def toggle_speak_aloud(self, state):
+        self.speak_aloud = bool(state)
+
+
+
+
     def process_response(self, response_text):
         self.display_message(response_text, "Gemini")
+        if self.speak_aloud:
+            self.speech_worker.add_text(response_text)
+    def on_speech_finished(self):
+        print("Speech completed")
+
+    def on_speech_error(self, error_message):
+        print(f"Speech error: {error_message}")
+    def toggle_speak_bot_messages(self, state):
+        self.speak_bot_messages = bool(state)
+
 
     def display_message(self, message, sender):
         formatted_message = self.format_message(message)
         self.chat_display.append(f"\n{sender}: {formatted_message}")
+
 
     def format_message(self, message):
         # Split the message into lines
@@ -277,6 +300,12 @@ class OptionsDialog(QDialog):
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
 
+        # Add Speak Aloud Checkbox
+        self.speak_aloud_checkbox = QCheckBox("Read Responses Aloud")
+        self.speak_aloud_checkbox.setChecked(parent.speak_aloud)
+        self.speak_aloud_checkbox.stateChanged.connect(parent.toggle_speak_aloud)
+        layout.addWidget(self.speak_aloud_checkbox)
+
         self.setLayout(layout)
 
     def show_sys_prompt_dialog(self):
@@ -382,3 +411,27 @@ class PersonalityDialog(QDialog):
         self.parent.parent.personality_manager.update_personality(trait, value)
 
 
+
+class SpeechWorker(QThread):
+    finished = pyqtSignal()
+    error = pyqtSignal(str)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.queue = []
+        self.tts_engine = pyttsx3.init()
+
+    def add_text(self, text):
+        self.queue.append(text)
+        if not self.isRunning():
+            self.start()
+
+    def run(self):
+        while self.queue:
+            text = self.queue.pop(0)
+            try:
+                self.tts_engine.say(text)
+                self.tts_engine.runAndWait()
+            except Exception as e:
+                self.error.emit(str(e))
+        self.finished.emit()
