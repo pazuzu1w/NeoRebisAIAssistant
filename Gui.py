@@ -2,16 +2,51 @@ from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPu
     QComboBox, QLabel, QColorDialog, QFontDialog, QSlider, QDialog, QDialogButtonBox, QCheckBox
 from PyQt6.QtGui import QFont, QColor
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QLocale
-from PyQt6.QtTextToSpeech import QTextToSpeech
 from model import init_model, send_message_async, get_available_models, DEFAULT_MODEL
 from dotenv import load_dotenv
 from enhance_vectordb import EnhancedVectorDatabase
 from user_profile import UserProfile
 from personality_system import PersonalityManager
 import os
+import datetime
 import pyttsx3
+import threading
 
 load_dotenv()
+
+
+class LogManager:
+    def __init__(self):
+        self.log_dir = "logs"
+        self.ensure_log_directory()
+        self.current_log_file = self.create_new_log_file()
+        self.lock = threading.Lock()
+
+    def ensure_log_directory(self):
+        if not os.path.exists(self.log_dir):
+            os.makedirs(self.log_dir)
+
+    def create_new_log_file(self):
+        today = datetime.date.today()
+        now = datetime.datetime.now()
+        base_filename = f"{today.strftime('%Y-%m-%d')}_{now.strftime('%H-%M-%S')}"
+
+        # Find the next available sequential number
+        i = 1
+        while True:
+            filename = f"{base_filename}_{i}.log"
+            full_path = os.path.join(self.log_dir, filename)
+            if not os.path.exists(full_path):
+                return full_path
+            i += 1
+
+    def log_message(self, sender, message):
+        with self.lock:
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            log_entry = f"\n[{timestamp}] {sender}: {message}\n"
+            with open(self.current_log_file, 'a', encoding='utf-8') as f:
+                f.write(log_entry)
+
 
 class ChatWorker(QThread):
     finished = pyqtSignal(str)
@@ -72,6 +107,8 @@ class App(QWidget):
         self.font = QFont("JetBrains Mono", 14)
 
         self.speak_aloud = False
+
+        self.log_manager = LogManager()
 
         self.speech_worker = SpeechWorker(self)
         self.speech_worker.finished.connect(self.on_speech_finished)
@@ -143,6 +180,7 @@ class App(QWidget):
         self.input_text.clear()
         if message and self.chat:
             self.display_message(message, "You")
+            self.log_manager.log_message("You", message)
             self.worker = ChatWorker(self.chat, message, self.vectordb, self.user_profile, self.personality_manager)
             self.worker.finished.connect(self.process_response)
             self.worker.error.connect(self.handle_error)
@@ -159,6 +197,7 @@ class App(QWidget):
 
     def process_response(self, response_text):
         self.display_message(response_text, "Gemini")
+        self.log_manager.log_message("Gemini", response_text)
         if self.speak_aloud:
             self.speech_worker.add_text(response_text)
     def on_speech_finished(self):
@@ -246,6 +285,7 @@ class App(QWidget):
     def closeEvent(self, event):
         self.vectordb.close()
         self.user_profile.save_profile()
+        self.log_manager.log_message("System", "Application closed")
         super().closeEvent(event)
 
 
