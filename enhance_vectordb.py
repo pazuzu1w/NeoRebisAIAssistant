@@ -16,6 +16,34 @@ logger = logging.getLogger(__name__)
 class EnhancedVectorDatabase:
     _local = threading.local()
 
+    def semantic_search(self, query, k=5):
+        query_embedding = self.model.encode([query])[0]
+
+        # Fetch all stored embeddings and their corresponding content
+        cursor = self.get_connection().cursor()
+        cursor.execute('SELECT embedding, text FROM messages')
+        stored_embeddings = []
+        stored_content = []
+
+        for row in cursor.fetchall():
+            stored_embeddings.append(np.frombuffer(row[0], dtype=np.float32))
+            stored_content.append(row[1])
+
+        stored_embeddings = np.array(stored_embeddings)
+
+        # Calculate cosine similarities
+        similarities = cosine_similarity([query_embedding], stored_embeddings)[0]
+
+        # Get top k results
+        top_k_indices = np.argsort(similarities)[-k:][::-1]
+
+        results = [
+            {"similarity": float(similarities[i]), "content": stored_content[i]}
+            for i in top_k_indices
+        ]
+
+        return results
+
     def __init__(self, db_path='enhanced_chatbot.db'):
         self.db_path = os.path.abspath(db_path)
         logger.info(f"Database path: {self.db_path}")
@@ -67,10 +95,7 @@ class EnhancedVectorDatabase:
         else:
             raise ValueError("Unsupported summarization method")
 
-
-
     def create_summary_tfidf(self, messages, num_sentences=3):
-
         text = " ".join(messages)
         sentences = text.split('. ')
         vectorizer = TfidfVectorizer().fit_transform(sentences)
@@ -81,12 +106,10 @@ class EnhancedVectorDatabase:
         summary = ". ".join(ranked_sentences[:num_sentences])
         return summary
 
-
     def create_summary_text_rank(self, messages, num_sentences=3):
         text = " ".join(messages)
         summary = summarizer.summarize(text, words=50)
         return summary
-
 
     def create_summary_bart(self, messages, num_sentences=3):
         model_name = 'facebook/bart-large-cnn'
@@ -98,8 +121,6 @@ class EnhancedVectorDatabase:
         summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
         return summary
 
-
-
     def create_summary_clustering(self, messages, num_sentences=3):
         text = " ".join(messages)
         sentences = text.split('. ')
@@ -110,9 +131,6 @@ class EnhancedVectorDatabase:
         closest = np.argsort(cosine_similarity(cluster_centers, vectors), axis=1)
         summary = ". ".join([sentences[i] for i in closest[:, -1]])
         return summary
-
-
-
 
     def search_similar(self, query, top_k=5):
         query_embedding = self.model.encode([query])[0]

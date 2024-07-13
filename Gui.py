@@ -20,7 +20,7 @@ load_dotenv()
 class SearchDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Search Logs")
+        self.setWindowTitle("Search Logs and VectorDB")
         self.layout = QVBoxLayout()
 
         self.search_input = QLineEdit()
@@ -203,28 +203,36 @@ class App(QWidget):
 
     def perform_search(self, query):
         try:
-            results = self.log_manager.search_logs(query)
-            if results:
-                self.display_message(f"Search results for '{query}':", "System")
-                for result in results:
+            log_results = self.log_manager.search_logs(query)
+            vector_results = self.vectordb.semantic_search(query, k=5)  # Assuming k=5 for top 5 results
+
+            self.display_message(f"Search results for '{query}':", "System")
+
+            if log_results:
+                self.display_message("Log Search Results:", "System")
+                for result in log_results[:5]:  # Limiting to 5 results
                     self.display_message(result, "Log")
 
-                # Prepare context for the bot
-                context = f"The user searched for '{query}' in the logs. Here are the relevant results:\n"
-                context += "\n".join(results[:5])  # Limit to first 5 results to avoid overwhelming the bot
-                context += "\nBased on these search results, please provide a summary or answer any questions the user might have."
+            if vector_results:
+                self.display_message("Vector DB Semantic Search Results:", "System")
+                for result in vector_results:
+                    self.display_message(f"Similarity: {result['similarity']:.2f} - {result['content']}", "VectorDB")
 
-                # Send context to the bot for processing
-                if self.chat:
-                    self.worker = ChatWorker(self.chat, context, self.vectordb, self.user_profile,
-                                             self.personality_manager)
-                    self.worker.finished.connect(self.process_response)
-                    self.worker.error.connect(self.handle_error)
-                    self.worker.start()
-                else:
-                    self.show_error_message("Chat model not initialized. Please check your configuration.")
+            # Prepare context for the bot
+            context = f"The user searched for '{query}'. Here are the relevant results:\n"
+            context += "Log results:\n" + "\n".join(log_results[:5]) + "\n"
+            context += "Vector DB results:\n" + "\n".join(
+                [f"{r['similarity']:.2f} - {r['content']}" for r in vector_results])
+            context += "\nBased on these search results, please provide a summary or answer any questions the user might have."
+
+            # Send context to the bot for processing
+            if self.chat:
+                self.worker = ChatWorker(self.chat, context, self.vectordb, self.user_profile, self.personality_manager)
+                self.worker.finished.connect(self.process_response)
+                self.worker.error.connect(self.handle_error)
+                self.worker.start()
             else:
-                self.display_message(f"No results found for '{query}'", "System")
+                self.show_error_message("Chat model not initialized. Please check your configuration.")
         except Exception as e:
             self.show_error_message(f"Error performing search: {e}")
 
