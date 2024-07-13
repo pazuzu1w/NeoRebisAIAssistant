@@ -150,7 +150,7 @@ class App(QWidget):
 
     def display_message(self, message, sender):
         formatted_message = self.format_message(message)
-        self.chat_display.append(f"{sender}:{formatted_message}")
+        self.chat_display.appendn(f"\n{sender}: {formatted_message}")
 
     def format_message(self, message):
         # Split the message into lines
