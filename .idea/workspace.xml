@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="summary system now prompts response in chat">
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/N__E__O---R__E__B__I__S.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/N__E__O---R__E__B__I__S.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/Gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +35,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/pazuzu1w/N__E__O---R__E__B__I__S.git&quot;,
-    &quot;accountId&quot;: &quot;b72392a8-1d58-4fdf-9ca7-2c3db60069b7&quot;
+    &quot;accountId&quot;: &quot;65bd4b07-3bbc-4e84-afd5-64d43bff948d&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -48,6 +50,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Python.Gui.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
     &quot;Python.enhance_vectordb.executor&quot;: &quot;Run&quot;,
     &quot;Python.gui.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
@@ -59,12 +62,19 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/pazuz/PycharmProjects/game1/tDtRefactor.py&quot;
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/pazuz/PycharmProjects/game1/tDtRefactor.py&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RunAnythingCache">
     <option name="myCommands">
-      <command value="pip install sentence-transformers" />
       <command value="pip install sentence-transformers scikit-learn" />
       <command value="pip install transformers" />
       <command value="pyinstaller --onefile --add-data &quot;.env;.&quot; Main.py" />
@@ -72,12 +82,26 @@
       <command value="pip install transformers-u" />
       <command value="python.exe -m pip install --upgrade pip" />
       <command value="pip install transformers -U" />
+      <command value="pip install pyQt6" />
+      <command value="pip install python-dotenv" />
+      <command value="pip install requirements.txt" />
+      <command value="pip install sqlite" />
+      <command value="pip install sqlite3" />
+      <command value="pip install sqlite3py" />
+      <command value="pip install --upgrade sqlite3" />
+      <command value="pip install --upgrade sqlite3 " />
+      <command value="pip install sentence-transformers" />
+      <command value="pip install distutils" />
+      <command value="pip install setuptools" />
+      <command value="pip install huggingface_hub" />
+      <command value="pip install --upgrade sentence_transformers huggingface_hub" />
     </option>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-5b207ade9991-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.17890.14" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.18034.82" />
+        <option value="bundled-python-sdk-975db3bf15a3-2767605e8bc2-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.18034.82" />
       </set>
     </attachedChunks>
   </component>
@@ -89,6 +113,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1719560656286</updated>
+      <workItem from="1721391370492" duration="49000" />
+      <workItem from="1721391438320" duration="827000" />
+      <workItem from="1721392509384" duration="8666000" />
+      <workItem from="1721511036509" duration="6106000" />
+      <workItem from="1721523459788" duration="2500000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -197,6 +226,9 @@
     <option name="localTasksCounter" value="14" />
     <servers />
   </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
     <MESSAGE value="personality sliders and user preferences added" />
@@ -210,5 +242,9 @@
     <MESSAGE value="threaded summary system" />
     <MESSAGE value="summary system now prompts response in chat" />
     <option name="LAST_COMMIT_MESSAGE" value="summary system now prompts response in chat" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$Main.coverage" NAME="Main Coverage Results" MODIFIED="1721530721136" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$vectordb.coverage" NAME="vectordb Coverage Results" MODIFIED="1721392910017" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

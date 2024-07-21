@@ -182,7 +182,7 @@ class App(QWidget):
         # Set up periodic summary creation
         self.summary_timer = QTimer(self)
         self.summary_timer.timeout.connect(self.start_summary_creation)
-        self.summary_timer.start(500000)  # Create summary every 5 minutes
+        self.summary_timer.start(1500000)  # Create summary every 5 minutes
 
         # Initialize summary worker
         self.summary_worker = None
@@ -511,6 +511,7 @@ class OptionsDialog(QDialog):
         if dialog.exec() == QDialog.DialogCode.Accepted:
             system_prompt_text = dialog.system_prompt_input.text()
             self.parent.apply_system_prompt(system_prompt_text)
+
     def show_user_prefs_dialog(self):
         dialog = UserPreferencesDialog(self)
         if dialog.exec() == QDialog.DialogCode.Accepted:
