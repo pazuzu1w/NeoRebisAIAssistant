@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="summary system now prompts response in chat">
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/N__E__O---R__E__B__I__S.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/N__E__O---R__E__B__I__S.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/Gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,6 +91,9 @@
       <command value="pip install setuptools" />
       <command value="pip install huggingface_hub" />
       <command value="pip install --upgrade sentence_transformers huggingface_hub" />
+      <command value="pip install tts" />
+      <command value="pip install TTS" />
+      <command value="pip install coqui-tts" />
     </option>
   </component>
   <component name="SharedIndexes">
@@ -117,7 +116,7 @@
       <workItem from="1721391438320" duration="827000" />
       <workItem from="1721392509384" duration="8666000" />
       <workItem from="1721511036509" duration="6106000" />
-      <workItem from="1721523459788" duration="2500000" />
+      <workItem from="1721523459788" duration="4462000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -223,7 +222,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720896914915</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="summary system now prompts response in chat">
+      <option name="closed" value="true" />
+      <created>1721534386011</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1721534386011</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

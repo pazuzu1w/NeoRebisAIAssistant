@@ -3,10 +3,12 @@ from google.generativeai.types import HarmBlockThreshold
 from google.generativeai.types.safety_types import HarmCategory
 import os
 from dotenv import load_dotenv
-
+from entityDB import EntityDB as eDB
 load_dotenv()
-
 DEFAULT_MODEL = "models/gemini-1.5-pro-latest"
+
+
+
 
 def get_available_models():
     try:
@@ -19,6 +21,9 @@ def get_available_models():
     except Exception as e:
         print(f"Failed to get model list: {e}")
         return [DEFAULT_MODEL]
+
+
+
 
 
 def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
@@ -45,12 +50,13 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
 
         model = genai.GenerativeModel(
             model_name=model_name,
+            tools=[eDB.summon_entity, eDB.add_field],
             safety_settings=safety_settings,
             generation_config=generation_config,
             system_instruction=system_prompt
         )
 
-        chat = model.start_chat(history=[])
+        chat = model.start_chat(history=[], enable_automatic_function_calling=True)
 
         print(f"Model '{model_name}' initialized successfully! 🔥")
         return chat

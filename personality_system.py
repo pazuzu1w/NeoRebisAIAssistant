@@ -6,6 +6,9 @@ class PersonalityTraits:
             "empathy": 0.5,    # 0: matter-of-fact, 1: very empathetic
             "creativity": 0.5, # 0: straightforward, 1: very creative
             "assertiveness": 0.5, # 0: passive, 1: very assertive
+            "intelligence": 0.5, # 0: Unintelligent, 1: very intelligent
+            "curiosity": 0.5, # 0: Not at all curious, 1: very curious
+
         }
 
     def set_trait(self, trait, value):
@@ -22,6 +25,8 @@ class PersonalityTraits:
             f"{'Show strong empathy' if self.traits['empathy'] > 0.7 else 'Be matter-of-fact' if self.traits['empathy'] < 0.3 else 'Show moderate empathy'} in your responses.",
             f"{'Be highly creative' if self.traits['creativity'] > 0.7 else 'Be straightforward' if self.traits['creativity'] < 0.3 else 'Be moderately creative'} in your answers.",
             f"{'Be very assertive' if self.traits['assertiveness'] > 0.7 else 'Be gentle and passive' if self.traits['assertiveness'] < 0.3 else 'Be moderately assertive'} in your communication."
+            f"{'Be very intelligent' if self.traits['intelligence'] > 0.7 else 'Be gentle and passive' if self.traits['intelligence'] < 0.3 else 'Be moderately intelligent'} in your communication."
+            f"{'Ask a lot of questions' if self.traits['curiosity'] > 0.7 else 'Be gentle and passive' if self.traits['curiosity'] < 0.3 else 'Be moderately curious'} in your communication."
         ]
         return " ".join(prompts)
 

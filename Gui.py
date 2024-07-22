@@ -48,7 +48,7 @@ class LogManager:
     def create_new_log_file(self):
         today = datetime.date.today()
         now = datetime.datetime.now()
-        base_filename = f"{today.strftime('%Y-%m-%d')}_{now.strftime('%H-%M-%S')}"
+        base_filename = f"{today.strftime('%Y-%m-%d')}"
 
         # Find the next available sequential number
         i = 1
@@ -102,13 +102,26 @@ class ChatWorker(QThread):
             # Get user preferences and top topics
             user_preferences = self.user_profile.preferences
             top_topics = self.user_profile.get_top_topics()
-
+            first_name = self.user_profile.get_first_name("first_name_key")
+            last_name = self.user_profile.get_last_name("last_name_key")
+            alias = self.user_profile.get_alias("alias_key")
+            bio = self.user_profile.get_bio("bio_key")
+            core_values = self.user_profile.get_core_values()
+            primary_motivations = self.user_profile.get_primary_motivations()
             # Get personality prompt
             personality_prompt = self.personality_manager.get_personality_prompt()
 
             # Construct the full message with context
             context = f"User Preferences: {user_preferences}\nTop Topics: {top_topics}\n"
             context += f"Similar Messages: {similar_messages}\nRelevant Summaries: {relevant_summaries}\n"
+            context += f"User First Name: {first_name}\n"
+            context += f"User Last Name: {last_name}\n"
+            context += f"User Alias: {alias}\n"
+            context += f"User Bio: {bio}\n"
+            context += f"Core Values: {core_values}\n"
+            context += f"Primary Motivations: {primary_motivations}\n"
+
+
             context += f"Personality: {personality_prompt}\n\n"
             full_message = f"{context}User message: {self.message}"
 
@@ -143,7 +156,7 @@ class SummaryWorker(QThread):
 
 class App(QWidget):
 
-    DEFAULT_SYSTEM_PROMPT = "You are an AI assistant. Please be helpful and polite."
+    DEFAULT_SYSTEM_PROMPT = "You are Code personal ai assistant to your user, Tony. Together you make up the Neo Rebis, a trans human badass with a penchant for fighting the status quo and fighting to level the playing field for all people."
 
     def __init__(self):
         super().__init__()
@@ -404,7 +417,7 @@ class App(QWidget):
     def on_summary_created(self, summary):
         if summary:
             self.display_message("Created new conversation summary.", "System")
-            logger.info(f"New conversation summary created: {summary[:100]}...")  # Log first 100 chars
+            logger.info(f"New conversation summary created: {summary[:1000]}...")  # Log first 100 chars
             self.worker = ChatWorker(self.chat, summary, self.vectordb, self.user_profile,
                                      self.personality_manager)
             self.worker.finished.connect(self.process_response)
@@ -509,7 +522,7 @@ class OptionsDialog(QDialog):
     def show_sys_prompt_dialog(self):
         dialog = SystemPromptDialog(self)
         if dialog.exec() == QDialog.DialogCode.Accepted:
-            system_prompt_text = dialog.system_prompt_input.text()
+            system_prompt_text = dialog.system_prompt_input.toPlainText()
             self.parent.apply_system_prompt(system_prompt_text)
 
     def show_user_prefs_dialog(self):
@@ -540,7 +553,7 @@ class SystemPromptDialog(QDialog):
         self.setWindowTitle("Set System Prompt")
         layout = QVBoxLayout()
 
-        self.system_prompt_input = QLineEdit()
+        self.system_prompt_input = QTextEdit()
         self.system_prompt_input.setFont(parent.parent.font)  # Access main app's font
         self.system_prompt_input.setPlaceholderText("Enter System Prompt (optional)")
         layout.addWidget(QLabel("System Prompt:"))
@@ -561,7 +574,7 @@ class UserPreferencesDialog(QDialog):
         self.parent = parent
         # Add preference inputs (e.g., communication style, interests)
         self.pref_inputs = {}
-        for pref in ["communication_style", "interests"]:
+        for pref in ["communication_style", "interests","first_name", "last_name", "alias", "bio", "core_values", "primary_motivations"]:
             pref_layout = QHBoxLayout()
             pref_layout.addWidget(QLabel(pref.replace("_", " ").title()))
             pref_input = QLineEdit()
@@ -590,7 +603,7 @@ class PersonalityDialog(QDialog):
 
         # Add sliders for each personality trait
         self.trait_sliders = {}
-        for trait in ["formality", "humor", "empathy", "creativity", "assertiveness"]:
+        for trait in ["formality", "humor", "empathy", "creativity", "assertiveness", "intelligence", "curiosity"]:
             trait_layout = QHBoxLayout()
             trait_layout.addWidget(QLabel(trait.title()))
             slider = QSlider(Qt.Orientation.Horizontal)
