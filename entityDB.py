@@ -153,40 +153,7 @@ class EntityDB:
         else:
             print(f"Entity '{entity_name}' not found. Field '{field_name}' not added.")
 
-    def search_wrapper(query, *args, **kwargs):
-        if app_instance is None:
-            return "Error: App not initialized"
 
-            # Detailed logging of incoming arguments
-        print("search_wrapper received:")
-        print(f"Positional args: {args}")
-        print(f"Keyword args: {kwargs}")
-
-        # Try to parse the first argument as JSON if it's a string
-        if args and isinstance(args[0], str):
-            try:
-                parsed_args = json.loads(args[0])
-                print(f"Parsed JSON args: {parsed_args}")
-                if isinstance(parsed_args, dict):
-                    query = parsed_args.get('query', '')
-                else:
-                    query = str(parsed_args)
-            except json.JSONDecodeError:
-                query = args[0]
-        elif kwargs:
-            query = kwargs.get('query', '')
-        elif args:
-            query = args[0] if isinstance(args[0], str) else str(args[0])
-        else:
-            query = ''
-
-        print(f"Extracted query: {query}")
-
-        return app_instance.perform_search(query)
-
-    def bot_search(query: str):
-        db = EntityDB()
-        db.search_wrapper(query)
 
         def tavily_search(query: str):
             try:
@@ -244,3 +211,8 @@ class EntityDB:
         except Exception as e:
             logging.error(f"Error performing search: {e}")
             return {"error": str(e)}
+
+    def read_entity_wrapper(entity_name: str):
+        db = EntityDB()
+        print(f"Reading entity: {entity_name}")
+        return db.read_entity(entity_name)

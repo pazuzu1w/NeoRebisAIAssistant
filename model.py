@@ -50,7 +50,7 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
 
         model = genai.GenerativeModel(
             model_name=model_name,
-            tools=[eDB.summon_entity, eDB.add_field, eDB.local_search, eDB.tavily_search],
+            tools=[eDB.summon_entity, eDB.add_field, eDB.local_search, eDB.tavily_search, eDB.read_entity_wrapper],
             safety_settings=safety_settings,
             generation_config=generation_config,
             system_instruction=system_prompt
