@@ -111,39 +111,22 @@ class EntityDB:
         else:
             print(f"No entities found matching the query: '{query}'.")
             return []
-    @staticmethod
-    def create_entity_in_db(entity_name: str, fields: dict = {"exampleField": "value"},
-                            media: dict = {"exampleMediaField": "mediaValue"}) -> dict:
-        """
-
-        Args:
-            entity_name: The name of the entity.
-            fields: A dictionary of fields for the entity. Defaults to an empty dictionary if None.
-            media: Optional dictionary of media links. Defaults to an empty dictionary if None.
-
-        Returns:
-            A dictionary containing the result of the operation.
-        """
-        if fields is None:
-            fields = {}
-        if media is None:
-            media = {}
-
-        db = EntityDB()
-        db.create_entity(entity_name, fields=fields, media=media)
-        return {"status": "success", "entity_name": entity_name}
 
     def summon_entity(entity_name: str):
         """
-        Creates a new entity JSON file with the given name in the entity database.
+        Creates a new entity JSON file with the given name in the entity database,
+        but only if an entity with that name doesn't already exist.
 
         Args:
             entity_name: The name of the entity. This will be used as the filename.
         """
         db = EntityDB()
-        entity_data = {}  # We'll start with an empty entity for now.
-        db.create_entity(entity_name, fields=entity_data)
-        print(f"Entity '{entity_name}' summoned into the database!")
+        existing_entities = db.search_entities(entity_name)
+        if existing_entities:
+            print(f"Entity '{entity_name}' already exists. Summoning cancelled.")
+        else:
+            db.summon_entity(entity_name)
+            print(f"Entity '{entity_name}' summoned into the database!")
 
     def add_field(entity_name: str, field_name: str, field_value: str):
         """
