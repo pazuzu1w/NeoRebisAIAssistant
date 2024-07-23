@@ -12,7 +12,7 @@ DEFAULT_MODEL = "models/gemini-1.5-pro-latest"
 
 def get_available_models():
     try:
-        api_key = os.getenv('API_KEY')
+        api_key = os.getenv('API_KEY3')
         if not api_key:
             raise ValueError("API_KEY not found in environment variables")
 
@@ -50,7 +50,7 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
 
         model = genai.GenerativeModel(
             model_name=model_name,
-            tools=[eDB.summon_entity, eDB.add_field],
+            tools=[eDB.summon_entity, eDB.add_field, eDB.local_search, eDB.tavily_search],
             safety_settings=safety_settings,
             generation_config=generation_config,
             system_instruction=system_prompt
@@ -72,3 +72,4 @@ def send_message_async(chat, message):
     except Exception as e:
         print(f"Failed to send message: {e}")
         return None
+

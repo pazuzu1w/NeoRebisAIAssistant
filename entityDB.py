@@ -1,6 +1,13 @@
 import json
 import os
-
+from dotenv import load_dotenv
+from tavily import TavilyClient
+import logging
+from enhance_vectordb import EnhancedVectorDatabase
+# Global instance of the App class
+app_instance = None
+load_dotenv()
+tavily = TavilyClient(api_key=os.getenv('TAVILY_API_KEY'))
 
 class EntityDB:
     def __init__(self, db_folder="entity_db"):
@@ -145,3 +152,95 @@ class EntityDB:
             print(f"Field '{field_name}' added to entity '{entity_name}'.")
         else:
             print(f"Entity '{entity_name}' not found. Field '{field_name}' not added.")
+
+    def search_wrapper(query, *args, **kwargs):
+        if app_instance is None:
+            return "Error: App not initialized"
+
+            # Detailed logging of incoming arguments
+        print("search_wrapper received:")
+        print(f"Positional args: {args}")
+        print(f"Keyword args: {kwargs}")
+
+        # Try to parse the first argument as JSON if it's a string
+        if args and isinstance(args[0], str):
+            try:
+                parsed_args = json.loads(args[0])
+                print(f"Parsed JSON args: {parsed_args}")
+                if isinstance(parsed_args, dict):
+                    query = parsed_args.get('query', '')
+                else:
+                    query = str(parsed_args)
+            except json.JSONDecodeError:
+                query = args[0]
+        elif kwargs:
+            query = kwargs.get('query', '')
+        elif args:
+            query = args[0] if isinstance(args[0], str) else str(args[0])
+        else:
+            query = ''
+
+        print(f"Extracted query: {query}")
+
+        return app_instance.perform_search(query)
+
+    def bot_search(query: str):
+        db = EntityDB()
+        db.search_wrapper(query)
+
+        def tavily_search(query: str):
+            try:
+                response = tavily.qna_search(query=query, search_depth="advanced")
+                print(response)
+                return response
+            except Exception as e:
+                return f"Error performing search: {str(e)}"
+
+    def tavily_search(query: str):
+        try:
+            response = tavily.qna_search(query=query, search_depth="advanced")
+            print(response)
+            return response
+        except Exception as e:
+            return f"Error performing search: {str(e)}"
+
+
+
+    def local_search(query: str):
+        vectordb = EnhancedVectorDatabase()
+        """
+        Perform a local search on logs and vector database.
+
+        Args:
+        query (str): The search query.
+
+        Returns:
+        Dict[str, any]: A dictionary containing search results and context.
+        """
+        try:
+            vector_results = vectordb.semantic_search(query, k=5)
+
+            # Prepare results
+            results = {
+                "query": query,
+
+                "vector_results": [
+                    {"similarity": r['similarity'], "content": r['content']}
+                    for r in vector_results
+                ]
+            }
+
+            # Prepare context
+            context = f"Tony searched for '{query}'. Here are the relevant results:\n"
+
+            context += "Vector DB results:\n" + "\n".join(
+                [f"{r['similarity']:.2f} - {r['content']}" for r in results["vector_results"]])
+            context += "\nBased on these search results, please provide a summary or answer any questions the user might have."
+
+            results["context"] = context
+
+            return results
+
+        except Exception as e:
+            logging.error(f"Error performing search: {e}")
+            return {"error": str(e)}
