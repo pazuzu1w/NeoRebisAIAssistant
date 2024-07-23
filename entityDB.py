@@ -155,7 +155,10 @@ class EntityDB:
             field_value: The value for the new field.
         """
         db = EntityDB()
-        entity_data = {}  # We'll start with an empty entity for now.
-        db.update_entity(entity_name, fields=entity_data)
-
-        print(f"Field  added to entity")
+        entity_data = db.read_entity(entity_name)
+        if entity_data is not None:
+            entity_data[field_name] = field_value
+            db.update_entity(entity_name, **entity_data)
+            print(f"Field '{field_name}' added to entity '{entity_name}'.")
+        else:
+            print(f"Entity '{entity_name}' not found. Field '{field_name}' not added.")
