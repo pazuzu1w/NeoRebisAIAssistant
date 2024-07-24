@@ -1,55 +1,46 @@
 import json
 import os
+from typing import Dict, List, Any, Optional
 from dotenv import load_dotenv
 from tavily import TavilyClient
 import logging
 from enhance_vectordb import EnhancedVectorDatabase
-# Global instance of the App class
-app_instance = None
+
 load_dotenv()
 tavily = TavilyClient(api_key=os.getenv('TAVILY_API_KEY'))
 
 class EntityDB:
-    def __init__(self, db_folder="entity_db"):
+    def __init__(self, db_folder: str = "entity_db"):
         self.db_folder = db_folder
         if not os.path.exists(self.db_folder):
             os.makedirs(self.db_folder)
+        self.vectordb = EnhancedVectorDatabase()
 
-    def create_entity(self, entity_name, fields=None, media=None):
-        """
-        Creates a new entity JSON file with optional media links.
-
-        Args:
-            entity_name: The name of the entity (used as the filename).
-            fields: A dictionary of key-value pairs representing entity fields.
-            media: A dictionary of key-value pairs for media links (local paths or URLs).
-        """
+    @staticmethod
+    def create_entity(entity_name: str, field: Optional[Dict[str, Any]] = None, value: Optional[Dict[str, Any]] = None) -> None:
+        db_folder = "entity_db"  # You might want to make this configurable
         entity_data = {}
-        if fields:
-            entity_data.update(fields)
-        if media:
-            entity_data["media"] = media
+        if field:
+            entity_data.update(field)
+        if value:
+            entity_data.update(value)
 
-        entity_file = os.path.join(self.db_folder, f"{entity_name}.json")
+        entity_file = os.path.join(db_folder, f"{entity_name}.json")
 
         with open(entity_file, 'w') as f:
             json.dump(entity_data, f, indent=4)
         print(f"Entity '{entity_name}' created in the database.")
 
-    def read_entity(self, entity_name):
-        """
-        Reads an entity JSON file and returns the data.
-
-        Args:
-            entity_name: The name of the entity to read.
-
-        Returns:
-            A dictionary of entity data or None if the entity is not found.
-        """
-        entity_file = os.path.join(self.db_folder, f"{entity_name}.json")
+    @staticmethod
+    def read_entity(entity_name: str) -> Optional[Dict[str, Any]]:
+        db_folder = "entity_db"  # You might want to make this configurable
+        entity_file = os.path.join(db_folder, f"{entity_name}.json")
         if os.path.exists(entity_file):
+            print(f"Reading entity: {entity_name}")
             with open(entity_file, 'r') as f:
+                print(json.load(f))
                 return json.load(f)
+            print(json.load(f))
         else:
             print(f"Entity '{entity_name}' not found in the database.")
             return None
@@ -73,105 +64,95 @@ class EntityDB:
         else:
             print(f"Entity '{entity_name}' not found in the database. Update failed.")
 
-    def delete_entity(self, entity_name):
-        """
-        Deletes an entity JSON file.
-
-        Args:
-            entity_name: The name of the entity to delete.
-        """
-        entity_file = os.path.join(self.db_folder, f"{entity_name}.json")
+    @staticmethod
+    def delete_entity(entity_name: str) -> None:
+        # Confirm deletion
+        confirm_deletion = input(f"Are you sure you want to delete entity '{entity_name}' from the database? (yes/no): ")
+        if confirm_deletion.lower() != "yes":
+            print("Deletion cancelled.")
+            return
+        else:
+            print("Deleting entity...")
+        db_folder = "entity_db"  # You might want to make this configurable
+        entity_file = os.path.join(db_folder, f"{entity_name}.json")
         if os.path.exists(entity_file):
             os.remove(entity_file)
             print(f"Entity '{entity_name}' deleted from the database.")
         else:
             print(f"Entity '{entity_name}' not found in the database. Deletion failed.")
 
-    def list_entities(self):
-        """
-        Lists all entities in the database.
-
-        Returns:
-            A list of entity names.
-        """
-        entities = [file.replace(".json", "") for file in os.listdir(self.db_folder) if file.endswith(".json")]
+    @staticmethod
+    def list_entities() -> List[str]:
+        db_folder = "entity_db"  # You might want to make this configurable
+        print("Listing entities in the database:")
+        entities = [file.replace(".json", "") for file in os.listdir(db_folder) if file.endswith(".json")]
         if entities:
+            print(entities)
             return entities
         else:
             print("No entities found in the database.")
             return []
 
-    def search_entities(self, query):
-        """
-        Searches for entities in the database based on a query string.
-
-        Args:
-            query: The search query string.
-
-        Returns:++
-            A list of entity names that match the query.
-        """
-        results = [file.replace(".json", "") for file in os.listdir(self.db_folder) if
-                   file.endswith(".json") and query.lower() in file.replace(".json", "").lower()]
+    @staticmethod
+    def search_entities(query: str) -> List[str]:
+        print(f"Searching for entities matching the query: '{query}'")
+        db_folder = "entity_db"  # You might want to make this configurable
+        results = [file.replace(".json", "") for file in os.listdir(db_folder) if
+                   file.endswith(".json") and query in file.replace(".json", "")]
         if results:
+            print(results)
             return results
         else:
             print(f"No entities found matching the query: '{query}'.")
             return []
 
-    def summon_entity(entity_name: str):
-        """
-        Creates a new entity JSON file with the given name in the entity database,
-        but only if an entity with that name doesn't already exist.
-
-        Args:
-            entity_name: The name of the entity. This will be used as the filename.
-        """
+    @staticmethod
+    def summon_entity(entity_name: str, field: str, field_value: str) -> None:
+        print("new summoning occurring")
         db = EntityDB()
-        existing_entities = db.search_entities(entity_name)
-        if existing_entities:
-            print(f"Entity '{entity_name}' already exists. Summoning cancelled.")
+        db.search_entities(entity_name)
+        if entity_name in db.search_entities(entity_name):
+            print(f"Entity '{entity_name}' already exists in the database. Do you want to continue summoning? this will over write the entire JSON (yes/no)")
+            confirm = input()
+            if confirm.lower() != "yes":
+                print("Overwrite confirmed.")
+                db.create_entity(entity_name, {field: field_value})
+                print(f"Entity '{entity_name}' summoned into the database!")
+                return
+            else:
+                print("Summoning cancelled.")
+                return
         else:
-            db.summon_entity(entity_name)
+            db.create_entity(entity_name, {field: field_value})
             print(f"Entity '{entity_name}' summoned into the database!")
 
-    def add_field(entity_name: str, field_name: str, field_value: str):
-        """
-        Adds a field to an existing entity in the database.
+    @staticmethod
+    def add_field(entity_name: str, field_name: str, field_value: str) -> Dict[str, Any]:
+        print("add_field invoked")
+        db_folder = "entity_db"  # Make sure this matches your actual db_folder path
+        entity_file = os.path.join(db_folder, f"{entity_name}.json")
 
-        Args:
-            entity_name: The name of the entity to update.
-            field_name: The name of the field to add.
-            field_value: The value for the new field.
-        """
-        db = EntityDB()
-        entity_data = db.read_entity(entity_name)
-        if entity_data is not None:
-            entity_data[field_name] = field_value
-            db.update_entity(entity_name, **entity_data)
-            print(f"Field '{field_name}' added to entity '{entity_name}'.")
+        if os.path.exists(entity_file):
+            with open(entity_file, 'r') as f:
+                entity_data = json.load(f)
         else:
-            print(f"Entity '{entity_name}' not found. Field '{field_name}' not added.")
+            entity_data = {}
 
+        entity_data[field_name] = field_value
 
+        with open(entity_file, 'w') as f:
+            json.dump(entity_data, f, indent=4)
 
-        def tavily_search(query: str):
-            try:
-                response = tavily.qna_search(query=query, search_depth="advanced")
-                print(response)
-                return response
-            except Exception as e:
-                return f"Error performing search: {str(e)}"
-
-    def tavily_search(query: str):
+        print(f"Field '{field_name}' added to entity '{entity_name}'.")
+        return entity_data
+    @staticmethod
+    def tavily_search(query: str) -> Dict[str, Any]:
         try:
             response = tavily.qna_search(query=query, search_depth="advanced")
             print(response)
             return response
         except Exception as e:
-            return f"Error performing search: {str(e)}"
-
-
+            return {"error": f"Error performing search: {str(e)}"}
 
     def local_search(query: str):
         vectordb = EnhancedVectorDatabase()
@@ -185,6 +166,7 @@ class EntityDB:
         Dict[str, any]: A dictionary containing search results and context.
         """
         try:
+            print(f"Performing local search for {query} ...")
             vector_results = vectordb.semantic_search(query, k=5)
 
             # Prepare results
@@ -198,21 +180,23 @@ class EntityDB:
             }
 
             # Prepare context
-            context = f"Tony searched for '{query}'. Here are the relevant results:\n"
+            context = f"You searched for '{query}'. Here are the relevant results:\n"
 
             context += "Vector DB results:\n" + "\n".join(
                 [f"{r['similarity']:.2f} - {r['content']}" for r in results["vector_results"]])
             context += "\nBased on these search results, please provide a summary or answer any questions the user might have."
 
             results["context"] = context
-
+            print("search completed")
             return results
 
         except Exception as e:
             logging.error(f"Error performing search: {e}")
             return {"error": str(e)}
 
-    def read_entity_wrapper(entity_name: str):
+
+    @staticmethod
+    def read_entity_wrapper(entity_name: str) -> Optional[Dict[str, Any]]:
         db = EntityDB()
         print(f"Reading entity: {entity_name}")
         return db.read_entity(entity_name)

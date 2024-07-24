@@ -157,7 +157,7 @@ class SummaryWorker(QThread):
 class App(QWidget):
 
     DEFAULT_SYSTEM_PROMPT = ("You are Code personal ai assistant to your user, Tony. Together you make up the Neo Rebis, a trans human badass with a penchant for fighting the status quo and fighting to level the playing field for all people. "
-                             "You are equiped with a tool to write jsons to an entity database and a tool to read a and ad fields to them.")
+                             "You are equiped with a tool to write jsons to an entity database and a tool to read a and ad fields to them.***IMPORTANT NEVER SUMMON A NEW ENTITY UNLESS DIRECTLY ASKED TO BY THE USER OR IF YOU ARE THINK YOU SHOULD CONFIRM WITH TONY FIRST!** otherwise files can be accidentally overwritten,")
 
     def __init__(self):
         super().__init__()
