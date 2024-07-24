@@ -123,13 +123,13 @@ class EntityDB:
         if entity_name in db.search_entities(entity_name):
             print(f"Entity '{entity_name}' already exists in the database. Do you want to continue summoning? this will over write the entire JSON (yes/no)")
             confirm = input()
-            if confirm.lower() != "yes":
-                print("Overwrite confirmed.")
+            if confirm.lower() == "yes":
+                print("summoning confirmed.")
                 db.create_entity(entity_name, {field: field_value})
                 print(f"Entity '{entity_name}' summoned into the database!")
                 return
             else:
-                print("Summoning cancelled.")
+                print("Summoning canceled.")
                 return
         else:
             db.create_entity(entity_name, {field: field_value})
