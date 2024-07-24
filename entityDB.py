@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from tavily import TavilyClient
 import logging
 from enhance_vectordb import EnhancedVectorDatabase
+from typing import Dict, Any, Union
 
 load_dotenv()
 tavily = TavilyClient(api_key=os.getenv('TAVILY_API_KEY'))
@@ -32,18 +33,26 @@ class EntityDB:
         print(f"Entity '{entity_name}' created in the database.")
 
     @staticmethod
-    def read_entity(entity_name: str) -> Optional[Dict[str, Any]]:
-        db_folder = "entity_db"  # You might want to make this configurable
+    def read_entity(entity_name: str) -> Dict[str, Any]:
+        db_folder = "entity_db"  # Ensure this matches your actual db_folder path
         entity_file = os.path.join(db_folder, f"{entity_name}.json")
-        if os.path.exists(entity_file):
-            print(f"Reading entity: {entity_name}")
-            with open(entity_file, 'r') as f:
-                print(json.load(f))
-                return json.load(f)
-            print(json.load(f))
-        else:
-            print(f"Entity '{entity_name}' not found in the database.")
-            return None
+
+        try:
+            if os.path.exists(entity_file):
+                with open(entity_file, 'r', encoding='utf-8') as f:
+                    entity_data = json.load(f)
+                print(f"Successfully read entity: {entity_name}")
+                print(entity_data)
+                return {"status": "success", "data": entity_data}
+            else:
+                print(f"Entity '{entity_name}' not found in the database.")
+                return {"status": "error", "message": f"Entity '{entity_name}' not found"}
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON for entity '{entity_name}': {str(e)}")
+            return {"status": "error", "message": f"Invalid JSON in entity file: {str(e)}"}
+        except Exception as e:
+            print(f"Unexpected error reading entity '{entity_name}': {str(e)}")
+            return {"status": "error", "message": f"Unexpected error: {str(e)}"}
 
     def update_entity(self, entity_name, **fields):
         """

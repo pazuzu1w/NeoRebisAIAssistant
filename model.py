@@ -12,7 +12,7 @@ DEFAULT_MODEL = "models/gemini-1.5-pro-latest"
 
 def get_available_models():
     try:
-        api_key = os.getenv('API_KEY2')
+        api_key = os.getenv('API_KEY3')
         if not api_key:
             raise ValueError("API_KEY not found in environment variables")
 
