@@ -102,18 +102,6 @@ class EntityDB:
             print("No entities found in the database.")
             return []
 
-    @staticmethod
-    def search_entities(query: str) -> List[str]:
-        print(f"Searching for entities matching the query: '{query}'")
-        db_folder = "entity_db"  # You might want to make this configurable
-        results = [file.replace(".json", "") for file in os.listdir(db_folder) if
-                   file.endswith(".json") and query in file.replace(".json", "")]
-        if results:
-            print(results)
-            return results
-        else:
-            print(f"No entities found matching the query: '{query}'.")
-            return []
 
     @staticmethod
     def summon_entity(entity_name: str, field: str, field_value: str) -> None:
@@ -122,7 +110,7 @@ class EntityDB:
         db.search_entities(entity_name)
         if entity_name in db.search_entities(entity_name):
             print(f"Entity '{entity_name}' already exists in the database. Do you want to continue summoning? this will over write the entire JSON (yes/no)")
-            confirm = input()
+            confirm = input("type 'yes' to confirm overwrite or 'no': ")
             if confirm.lower() == "yes":
                 print("summoning confirmed.")
                 db.create_entity(entity_name, {field: field_value})
@@ -204,8 +192,3 @@ class EntityDB:
             return {"error": str(e)}
 
 
-    @staticmethod
-    def read_entity_wrapper(entity_name: str) -> Optional[Dict[str, Any]]:
-        db = EntityDB()
-        print(f"Reading entity: {entity_name}")
-        return db.read_entity(entity_name)

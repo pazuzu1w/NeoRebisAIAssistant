@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="syspropt default includes all tools which are now working">
+    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="reversed summon entity confimation logic to correctly reflect user choice">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entityDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/entityDB.py" afterDir="false" />
     </list>
@@ -136,7 +136,8 @@
       <workItem from="1721720692740" duration="1782000" />
       <workItem from="1721738631535" duration="22495000" />
       <workItem from="1721798183092" duration="2530000" />
-      <workItem from="1721833765766" duration="1848000" />
+      <workItem from="1721833765766" duration="5206000" />
+      <workItem from="1721883202682" duration="1765000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -306,7 +307,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721801093875</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="reversed summon entity confimation logic to correctly reflect user choice">
+      <option name="closed" value="true" />
+      <created>1721836380767</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1721836380767</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -341,12 +350,13 @@
     <MESSAGE value="more functions added/fixed read_entity needs repair to actually send json to bots mind" />
     <MESSAGE value="read entity now returns string which may or maynot work but doesnt at least return server or client error" />
     <MESSAGE value="syspropt default includes all tools whihc are now working" />
-    <option name="LAST_COMMIT_MESSAGE" value="syspropt default includes all tools whihc are now working" />
+    <MESSAGE value="reversed summon entity confimation logic to correctly reflect user choice" />
+    <option name="LAST_COMMIT_MESSAGE" value="reversed summon entity confimation logic to correctly reflect user choice" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$model.coverage" NAME="model Coverage Results" MODIFIED="1721754182561" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$personality_system.coverage" NAME="personality_system Coverage Results" MODIFIED="1721572513417" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$Main.coverage" NAME="Main Coverage Results" MODIFIED="1721835830081" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$Main.coverage" NAME="Main Coverage Results" MODIFIED="1721884700343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$Gui.coverage" NAME="Gui Coverage Results" MODIFIED="1721720860123" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$user_profile.coverage" NAME="user_profile Coverage Results" MODIFIED="1721575576476" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$entityDB.coverage" NAME="entityDB Coverage Results" MODIFIED="1721779793854" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
