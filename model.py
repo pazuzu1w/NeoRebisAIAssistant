@@ -8,7 +8,7 @@ import utils
 from entityDB import EntityDB as eDB
 load_dotenv()
 DEFAULT_MODEL = "models/gemini-1.5-pro-latest"
-from utils import surf_web
+
 
 
 
@@ -47,12 +47,14 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
             "temperature": 0.9,
             "top_p": 1,
             "top_k": 1,
-            "max_output_tokens": 9000,
+            "max_output_tokens": 4000,
         }
 
         model = genai.GenerativeModel(
             model_name=model_name,
-            tools=[eDB.summon_entity, eDB.add_field, eDB.local_search, eDB.tavily_search, eDB.read_entity, utils.google_search, eDB.list_entities, utils.email, utils.surf_web, eDB.delete_entity],
+            tools=[eDB.summon_entity, eDB.add_field, eDB.local_search,
+                   eDB.tavily_search, eDB.read_entity, utils.google_search,
+                   eDB.list_entities, utils.email, utils.surf_web, eDB.delete_entity],
             safety_settings=safety_settings,
             generation_config=generation_config,
             system_instruction=system_prompt
