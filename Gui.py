@@ -167,6 +167,7 @@ class App(QWidget):
                              "You are encouraged to use these tools at anytime to learn all you can about Tony so you can be the "
                              "best partner you can be to him. Remember to use the search tools concurrently to keep check for any"
                              "information you may have forgotten. You are also encouraged to use the tools to help Tony with any task "
+                             "***IMPORTANT IN ORDER TO AVOID ENTITY OVERWRITES YOU MUST ATTEMPT TO READ AN ENTITY BEFORE WRITING TO IT***"
                              "***USE ANY OF THESE TOOLS AT WILL OR WHEN REQUESTED BY TONY EXCEPT THE  DELETE ONLY USE THAT AFTER TONY COMFIRMS***")
     def __init__(self):
         super().__init__()

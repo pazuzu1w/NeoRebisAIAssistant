@@ -135,7 +135,7 @@ class EnhancedVectorDatabase:
         result = cursor.fetchone()
         return result[0] if result else None
 
-    def create_summary(self, messages, method="tfidf", num_sentences=3):
+    def create_summary(self, messages, method="tfidf", num_sentences=5):
         if method == "tfidf":
             return self.create_summary_tfidf(messages, num_sentences)
         elif method == "textrank":
@@ -173,7 +173,7 @@ class EnhancedVectorDatabase:
         summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
         return summary
 
-    def create_summary_clustering(self, messages, num_sentences=3):
+    def create_summary_clustering(self, messages, num_sentences=5):
         text = " ".join(messages)
         sentences = text.split('. ')
         vectorizer = TfidfVectorizer().fit_transform(sentences)
@@ -195,6 +195,7 @@ class EnhancedVectorDatabase:
             results.append((row[0], row[1], similarity))
         results.sort(key=lambda x: x[2], reverse=True)
         logger.info(f"Found {len(results)} similar messages")
+        print(results[:top_k])
         return results[:top_k]
 
     def add_summary(self, summary, start_time, end_time):
