@@ -327,7 +327,7 @@ class App(QWidget):
             text = self.input_text.toPlainText()
             if text.endswith("send. ") or text.endswith("Send. "):
                 logging.debug("Trigger detected")
-                trigger_message = text[:-4]
+                trigger_message = text[:-6] # Remove the trigger phrase
                 self.input_text.clear()
                 self.send_message(trigger_message)  # Assuming send_message is your existing message sending function
 
