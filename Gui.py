@@ -13,6 +13,7 @@ import os
 import datetime
 import pyttsx3
 import threading
+import logging
 
 load_dotenv()
 
@@ -207,10 +208,13 @@ class App(QWidget):
         # Set up periodic summary creation
         self.summary_timer = QTimer(self)
         self.summary_timer.timeout.connect(self.start_summary_creation)
-        self.summary_timer.start(1500000)  # Create summary every 5 minutes
+        self.summary_timer.start(700000)  # Create summary every 5 minutes
 
         # Initialize summary worker
         self.summary_worker = None
+
+        self.is_text_changed_connected = True  # Track the connection state
+
 
     def initUI(self):
         main_layout = QVBoxLayout()
@@ -229,6 +233,9 @@ class App(QWidget):
         self.input_text.setReadOnly(False)
         self.input_text.setFont(self.font)
         input_layout.addWidget(self.input_text)
+
+        # Connect textChanged signal to a new slot
+        self.input_text.textChanged.connect(self.check_for_trigger)
 
         self.send_button = QPushButton("Send")
         self.send_button.clicked.connect(self.send_message)
@@ -300,6 +307,35 @@ class App(QWidget):
         print(f"Error: {message}")
 
 
+
+    def handle_error(self, error):
+        # Log the error
+        logger.error(f"An error occurred: {error}")
+        # Optional: Display an error dialog or take other error handling actions
+        # For example, you could show a QMessageBox with the error message
+        # QMessageBox.critical(self, "Error", str(error))
+
+
+
+
+    def check_for_trigger(self):
+        try:
+            logging.debug("Checking for trigger...")
+            # Temporarily disconnect the signal to prevent potential loop
+            self.input_text.textChanged.disconnect(self.check_for_trigger)
+
+            text = self.input_text.toPlainText()
+            if text.endswith("send. ") or text.endswith("Send. "):
+                logging.debug("Trigger detected")
+                trigger_message = text[:-4]
+                self.input_text.clear()
+                self.send_message(trigger_message)  # Assuming send_message is your existing message sending function
+
+        except Exception as e:
+            logging.error(f"Error in check_for_trigger: {e}")
+        finally:
+            # Reconnect the signal after processing
+            self.input_text.textChanged.connect(self.check_for_trigger)
     def show_options_dialog(self):
         try:
             dialog = OptionsDialog(self)
@@ -320,9 +356,16 @@ class App(QWidget):
         self.initialize_model_and_chat(self.current_model, self.system_prompt)
         self.display_message("System prompt updated!", "System")
 
-    def send_message(self):
+    def send_message(self, trigger_message):
+        # Temporarily disconnect the signal to prevent potential loop
+
+
         message = self.input_text.toPlainText()
         self.input_text.clear()
+
+        # Reconnect the signal after modifications
+
+
         if message and self.chat:
             current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             timestamped_message = f"[{current_time}] {message}"
@@ -331,11 +374,19 @@ class App(QWidget):
             self.worker = ChatWorker(self.chat, timestamped_message, self.vectordb, self.user_profile,
                                      self.personality_manager)
             self.worker.finished.connect(self.process_response)
-            self.worker.error.connect(self.handle_error)
+
+            self.worker.start()
+        if trigger_message and self.chat:
+            current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            timestamped_message = f"[{current_time}] {trigger_message}"
+            self.display_message(timestamped_message, "You")
+            self.log_manager.log_message("You", timestamped_message)
+            self.worker = ChatWorker(self.chat, timestamped_message, self.vectordb, self.user_profile,
+                                     self.personality_manager)
+            self.worker.finished.connect(self.process_response)
+
             self.worker.start()
 
-    def handle_error(self, error_message):
-        self.display_message(f"Error: {error_message}", "System")
 
     def toggle_speak_aloud(self, state):
         self.speak_aloud = bool(state)
