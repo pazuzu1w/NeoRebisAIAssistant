@@ -33,6 +33,21 @@ class EntityDB:
         print(f"Entity '{entity_name}' created in the database.")
 
     @staticmethod
+    def search_entities(query: str) -> List[str]:
+        db = EntityDB()
+        print(f"Searching for entities matching the query: '{query}'")
+        db_folder = "entity_db"  # You might want to make this configurable
+        results = [file.replace(".json", "") for file in os.listdir(db_folder) if
+                   file.endswith(".json") and query in file.replace(".json", "")]
+        if results:
+            print(results)
+            db.read_entity(query)
+            return results
+        else:
+            print(f"No entities found matching the query: '{query}'.")
+            return []
+
+    @staticmethod
     def read_entity(entity_name: str) -> Dict[str, Any]:
         db_folder = "entity_db"  # Ensure this matches your actual db_folder path
         entity_file = os.path.join(db_folder, f"{entity_name}.json")
