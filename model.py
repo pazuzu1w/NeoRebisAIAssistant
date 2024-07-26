@@ -54,7 +54,8 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
             model_name=model_name,
             tools=[eDB.summon_entity, eDB.add_field, eDB.local_search,
                    eDB.tavily_search, eDB.read_entity, utils.google_search,
-                   eDB.list_entities, utils.email, utils.surf_web, eDB.delete_entity],
+                   eDB.list_entities, utils.email, utils.surf_web, eDB.delete_entity,
+                   utils.create_file, utils.read_file, utils.edit_file, utils.read_directory],
             safety_settings=safety_settings,
             generation_config=generation_config,
             system_instruction=system_prompt

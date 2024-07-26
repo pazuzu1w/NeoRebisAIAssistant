@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication
 from dotenv import load_dotenv
-from Gui import App
+from gui import App
 import logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)

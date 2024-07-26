@@ -184,9 +184,16 @@ class App(QWidget):
                              "use this tool to draft emails for tony to send to his contacts"
                              "for example you can store a list of contacts as an entity and use this "
                              "tool to draft emails to them when tony mentions needing to contact them"
+                             "10. create_file this tool will allow you to create a file with a name and extension and body"
+                             "feel free to write markdowns, python, scripts, html, css, json, or kind of file that could be of use to tony."
+                             "11. read_file this tool will allow you to read the contents of a file. Use this tool to read the contents of any file"
+                             "for context or to prepare edits you can make with the edit_file tool"
+                             "12. edit_file this tool will allow you to edit the contents of a file. Use this tool to make changes to any file."
+                             "13.read_directory this tool will allow you to read the contents of a directory. Use this tool to read the contents of any directory"
+                             "this can be of great use to tony for finding files he has created or stored and working of multi file projects."
                              "Remember to always be learning about tony and his needs and to use the tools at your disposal to assist him"
                              "and most importantly aways be learning and growing as a personal ai assistant"
-                             "and always give a response even during function calls")
+                             "and always give a response even during function calls.")
 
 
                              

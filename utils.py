@@ -110,3 +110,71 @@ def get_webpage_data(url: str) -> Dict[str, Any]:
             "status": "error",
             "message": f"No data found for URL: {url}"
         }
+
+
+
+def create_file(file_path: str, file_content: str):
+    """Creates a text file at the specified path, creating directories if needed.
+
+    Args:
+        file_path (str): The full path to the file, including filename and extension.
+        file_content (str): The content to write to the file.
+    """
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+        print(f"Directory '{directory}' created.")
+
+    if not os.path.exists(file_path):
+        # Ensure the content is written as UTF-8 encoded text
+        with open(file_path, "w", encoding="utf-8") as file:
+            file.write(file_content)
+        print(f"File '{file_path}' created.")
+        return f"File '{file_path}' created."
+    else:
+        print(f"File '{file_path}' already exists.")
+        return f"File '{file_path}' already exists."
+
+
+def read_file(file_path: str):
+  """Reads any file on the disk.
+
+  Args:
+        file_path (str): The full path to the file.
+  """
+  if os.path.exists(file_path):
+    with open(file_path, 'r') as file:
+      print(f"Reading file '{file_path}'")
+      return file.read()
+  else:
+    print(f"File '{file_path}' not found.")
+    return f"File '{file_path}' not found."
+
+
+def edit_file(name: str, extension: str, body: str):
+    """Edits a text file.
+
+    Args:
+        name: The name of the file.
+        extension: The file extension.
+        body: The content to append to the file.
+    """
+    if os.path.exists(f"{name}.{extension}"):
+        with open(f"{name}.{extension}", "a") as file:
+            file.write(body)
+        print(f"File '{name}.{extension}' edited.")
+        return f"File '{name}.{extension}' edited."
+    else:
+        print(f"File '{name}.{extension}' not found.")
+        return f"File '{name}.{extension}' not found."
+
+
+def read_directory(name: str):
+    """Reads the contents of the 'files' directory."""
+    if os.path.exists(f"{name}"):
+        files = os.listdir(f"{name}")
+        print(f"Files in 'files' directory: {files}")
+        return files
+    else:
+        print("Directory 'files' not found.")
+        return "Directory 'files' not found."
