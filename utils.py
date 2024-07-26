@@ -126,9 +126,10 @@ def create_file(file_path: str, file_content: str):
         print(f"Directory '{directory}' created.")
 
     if not os.path.exists(file_path):
+        formatted_code = file_content.replace('\\n', '\n')
         # Ensure the content is written as UTF-8 encoded text
         with open(file_path, "w", encoding="utf-8") as file:
-            file.write(file_content)
+            file.write(formatted_code)
         print(f"File '{file_path}' created.")
         return f"File '{file_path}' created."
     else:
@@ -159,9 +160,10 @@ def edit_file(name: str, extension: str, body: str):
         extension: The file extension.
         body: The content to append to the file.
     """
+    formatted_code = body.replace('\\n', '\n ')
     if os.path.exists(f"{name}.{extension}"):
         with open(f"{name}.{extension}", "a") as file:
-            file.write(body)
+            file.write(formatted_code)
         print(f"File '{name}.{extension}' edited.")
         return f"File '{name}.{extension}' edited."
     else:

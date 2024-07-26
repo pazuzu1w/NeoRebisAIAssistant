@@ -237,7 +237,7 @@ class App(QWidget):
         # Set up periodic summary creation
         self.summary_timer = QTimer(self)
         self.summary_timer.timeout.connect(self.start_summary_creation)
-        self.summary_timer.start(700000)  # Create summary every 5 minutes
+        self.summary_timer.start(2000000)  # Create summary every 5 minutes
 
         # Initialize summary worker
         self.summary_worker = None

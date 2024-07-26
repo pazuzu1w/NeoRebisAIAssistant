@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="readme added still needs work">
+    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="text files can be read or written anywhere">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,41 +48,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JavaScript Debug.www.bing.com.html.executor": "Run",
-    "JavaScript Debug.www.suno.ai.html.executor": "Run",
-    "JavaScript Debug.www.youtube.com.html.executor": "Run",
-    "Python.Gui.executor": "Run",
-    "Python.Main.executor": "Run",
-    "Python.enhance_vectordb.executor": "Run",
-    "Python.entityDB.executor": "Run",
-    "Python.gui.executor": "Run",
-    "Python.guiCalc.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.model.executor": "Run",
-    "Python.pathex.executor": "Run",
-    "Python.personality_system.executor": "Run",
-    "Python.tDtRefactor.executor": "Run",
-    "Python.test.executor": "Run",
-    "Python.user_profile.executor": "Run",
-    "Python.utils.executor": "Run",
-    "Python.vectordb.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/pazuz/PycharmProjects/N__E__O---R__E__B__I__S/entity_db",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.www.bing.com.html.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.www.suno.ai.html.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.www.youtube.com.html.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Gui.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.enhance_vectordb.executor&quot;: &quot;Run&quot;,
+    &quot;Python.entityDB.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gui.executor&quot;: &quot;Run&quot;,
+    &quot;Python.guiCalc.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.model.executor&quot;: &quot;Run&quot;,
+    &quot;Python.pathex.executor&quot;: &quot;Run&quot;,
+    &quot;Python.personality_system.executor&quot;: &quot;Run&quot;,
+    &quot;Python.tDtRefactor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.user_profile.executor&quot;: &quot;Run&quot;,
+    &quot;Python.utils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.vectordb.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/pazuz/PycharmProjects/N__E__O---R__E__B__I__S/entity_db&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\pazuz\PycharmProjects\N__E__O---R__E__B__I__S_P\entity_db" />
@@ -150,7 +148,8 @@
       <workItem from="1721833765766" duration="5206000" />
       <workItem from="1721883202682" duration="19459000" />
       <workItem from="1721918787315" duration="13955000" />
-      <workItem from="1721937204263" duration="12345000" />
+      <workItem from="1721937204263" duration="12709000" />
+      <workItem from="1721962509124" duration="3707000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -392,7 +391,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721945536259</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="text files can be read or written anywhere">
+      <option name="closed" value="true" />
+      <created>1721956347787</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1721956347787</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -431,7 +438,8 @@
     <MESSAGE value="fixed sys prompt" />
     <MESSAGE value="fixed sys prompt and changed summary length" />
     <MESSAGE value="readme added still needs work" />
-    <option name="LAST_COMMIT_MESSAGE" value="readme added still needs work" />
+    <MESSAGE value="text files can be read or written anywhere" />
+    <option name="LAST_COMMIT_MESSAGE" value="text files can be read or written anywhere" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$model.coverage" NAME="model Coverage Results" MODIFIED="1721754182561" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -441,10 +449,10 @@
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$entityDB.coverage" NAME="entityDB Coverage Results" MODIFIED="1721779793854" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$utils.coverage" NAME="utils Coverage Results" MODIFIED="1721954192585" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$Main.coverage" NAME="Main Coverage Results" MODIFIED="1721937236709" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$main.coverage" NAME="main Coverage Results" MODIFIED="1721956009209" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$main.coverage" NAME="main Coverage Results" MODIFIED="1721978197272" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$gui.coverage" NAME="gui Coverage Results" MODIFIED="1721949677335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$Gui.coverage" NAME="Gui Coverage Results" MODIFIED="1721898623494" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$guiCalc.coverage" NAME="guiCalc Coverage Results" MODIFIED="1721954891254" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$guiCalc.coverage" NAME="guiCalc Coverage Results" MODIFIED="1721978771895" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$user_profile.coverage" NAME="user_profile Coverage Results" MODIFIED="1721575576476" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$model.coverage" NAME="model Coverage Results" MODIFIED="1721919152042" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$vectordb.coverage" NAME="vectordb Coverage Results" MODIFIED="1721392910017" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
