@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="text files can be read or written anywhere">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
-    </list>
+    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="text files can be read or written anywhere now with formatting fixed" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -149,7 +145,7 @@
       <workItem from="1721883202682" duration="19459000" />
       <workItem from="1721918787315" duration="13955000" />
       <workItem from="1721937204263" duration="12709000" />
-      <workItem from="1721962509124" duration="3707000" />
+      <workItem from="1721962509124" duration="4109000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -399,7 +395,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721956347787</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="text files can be read or written anywhere now with formatting fixed">
+      <option name="closed" value="true" />
+      <created>1721979867347</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1721979867347</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -439,7 +443,8 @@
     <MESSAGE value="fixed sys prompt and changed summary length" />
     <MESSAGE value="readme added still needs work" />
     <MESSAGE value="text files can be read or written anywhere" />
-    <option name="LAST_COMMIT_MESSAGE" value="text files can be read or written anywhere" />
+    <MESSAGE value="text files can be read or written anywhere now with formatting fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="text files can be read or written anywhere now with formatting fixed" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$model.coverage" NAME="model Coverage Results" MODIFIED="1721754182561" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
