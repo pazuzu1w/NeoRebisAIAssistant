@@ -52,13 +52,13 @@ def surf_web(url: str) -> Dict[str, Any]:
 
         # Extract the title and a brief content summary
         title = soup.title.string if soup.title else "No title found"
-        content_summary = ' '.join(soup.stripped_strings)[:500] + "..."  # First 500 characters
+        content_summary = ' '.join(soup.stripped_strings)[:1000] + "..."  # First 1000 characters
 
         # Prepare the webpage data
         webpage_data = {
             "title": title,
             "content_summary": content_summary,
-            "raw_html": response.text
+
         }
         print(f"Webpage data: {webpage_data}")
         # Add the webpage data to the 'websites' entity
