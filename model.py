@@ -3,7 +3,7 @@ from google.generativeai.types import HarmBlockThreshold
 from google.generativeai.types.safety_types import HarmCategory
 import os
 from dotenv import load_dotenv
-
+import pyautogui_utils
 import utils
 from entityDB import EntityDB as eDB
 load_dotenv()
@@ -55,7 +55,8 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
             tools=[eDB.summon_entity, eDB.add_field, eDB.local_search,
                    eDB.tavily_search, eDB.read_entity, utils.google_search,
                    eDB.list_entities, utils.email, utils.surf_web, eDB.delete_entity,
-                   utils.create_file, utils.read_file, utils.edit_file, utils.read_directory],
+                   utils.create_file, utils.read_file, utils.edit_file, utils.read_directory,
+                   pyautogui_utils.take_screenshot],
             safety_settings=safety_settings,
             generation_config=generation_config,
             system_instruction=system_prompt

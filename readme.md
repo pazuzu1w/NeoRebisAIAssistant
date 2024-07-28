@@ -57,6 +57,20 @@ We are still in development with many features to add and, but we hope this app 
 
 
 
+##     Screenshots
+![Full Screen](neo_rebis_screenshots/fullscreen.png)
+![Small Screen](neo_rebis_screenshots/defaultsize.png)
+![Search Box](neo_rebis_screenshots/searchbox.png)
+![Options Dialog](neo_rebis_screenshots/optionsdialog.png)
+![Profile Dialog](neo_rebis_screenshots/profiledialog.png)
+![AI Personality Dialog](neo_rebis_screenshots/aipersonalitydialog.png)
+![Model Dropdown](neo_rebis_screenshots/modeldropdown.png)
+![System Prompt Dialog](neo_rebis_screenshots/systempromptdialog.png)
+
+
+
+
+
 
  
 
