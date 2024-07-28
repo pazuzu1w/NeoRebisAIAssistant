@@ -14,9 +14,38 @@ import datetime
 import pyttsx3
 import threading
 import logging
+import pyaudio
+import speech_recognition as sr
 
 
 load_dotenv()
+
+
+class SpeechRecognitionWorker(QThread):
+    result_ready = pyqtSignal(str)
+    error_occurred = pyqtSignal(str)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.recognizer = sr.Recognizer()
+        self.microphone = sr.Microphone()
+        self.running = True
+
+    def run(self):
+        while self.running:
+            try:
+                with self.microphone as source:
+                    self.recognizer.adjust_for_ambient_noise(source)
+                    audio = self.recognizer.listen(source)
+
+                text = self.recognizer.recognize_google(audio)
+                self.result_ready.emit(text)
+            except Exception as e:
+                self.error_occurred.emit(str(e))
+
+    def stop(self):
+        self.running = False
+
 
 
 class SearchDialog(QDialog):
@@ -194,6 +223,7 @@ class App(QWidget):
                             f"this can be of great use to {user_name} for finding files he has created or stored and working of multi file projects."
                             f"14. take_screenshot this tool will allow you to take a screenshot of the screen for {user_name} and save it in a specified directory" 
                             f"15. open_application this tool will allow you to open an application on the system for {user_name}"
+                            f"16. search_youtube this tool will allow you to search youtube for videos for {user_name}, always list the returned results in the chat." 
                             f"Remember to always be learning about {user_name} and his needs and to use the tools at your disposal to assist him"
                              "and most importantly aways be learning and growing as a personal ai assistant."
                             f"*IMPORTANT ALWAYS GIVE A RESPONSE TO {user_name} AFTER ALL FUNCTION CALLS*!")
@@ -220,6 +250,11 @@ class App(QWidget):
 
         self.speak_aloud = False
 
+        # Initialize the speech recognition worker
+        self.speech_recognition_worker = SpeechRecognitionWorker()
+        self.speech_recognition_worker.result_ready.connect(self.on_speech_recognized)
+        self.speech_recognition_worker.error_occurred.connect(self.on_speech_error)
+
         self.log_manager = LogManager()
 
         self.speech_worker = SpeechWorker(self)
@@ -236,6 +271,8 @@ class App(QWidget):
         # Initialize with default model
         self.initialize_model_and_chat(self.current_model, self.system_prompt)
 
+        # Start the speech recognition worker thread
+        self.speech_recognition_worker.start()
 
         # Set up periodic summary creation
         self.summary_timer = QTimer(self)
@@ -286,9 +323,40 @@ class App(QWidget):
         self.search_button.clicked.connect(self.show_search_dialog)
         button_layout.addWidget(self.search_button)
 
+
+
+        # --- Speech Recognition Toggle Button ---
+        self.speech_button = QPushButton("Toggle Speech Recognition")
+        self.speech_button.clicked.connect(self.toggle_speech_recognition)
+        button_layout.addWidget(self.speech_button)
+
+        main_layout.addLayout(button_layout)
+
+
+
         main_layout.addLayout(button_layout)
 
         self.update_colors()
+
+    def on_speech_recognized(self, text):
+        # Update the input box with the recognized text
+        current_text = self.input_text.toPlainText()
+        self.input_text.setPlainText(current_text + " " + text)
+
+    def on_speech_error(self, error_message):
+        print(f"Speech recognition error: {error_message}")
+
+    def toggle_speech_recognition(self):
+        if self.speech_recognition_worker.isRunning():
+            self.speech_recognition_worker.stop()
+            self.speech_button.setText("Start Speech Recognition")
+        else:
+            self.speech_recognition_worker.running = True
+            self.speech_recognition_worker.start()
+            self.speech_button.setText("Stop Speech Recognition")
+
+
+
 
     def show_search_dialog(self):
         try:
@@ -357,9 +425,9 @@ class App(QWidget):
             self.input_text.textChanged.disconnect(self.check_for_trigger)
 
             text = self.input_text.toPlainText()
-            if text.endswith("send. ") or text.endswith("Send. "):
+            if text.endswith("send") or text.endswith("Send"):
                 logging.debug("Trigger detected")
-                trigger_message = text[:-6] # Remove the trigger phrase
+                trigger_message = text[:-4] # Remove the trigger phrase
                 self.input_text.clear()
                 self.send_message(trigger_message)  # Assuming send_message is your existing message sending function
 
@@ -547,6 +615,12 @@ class App(QWidget):
             self.display_message(f"Error initializing model: {str(e)}", "System")
 
     def closeEvent(self, event):
+
+        # Stop the speech recognition worker
+        self.speech_recognition_worker.stop()
+        self.speech_recognition_worker.wait()
+
+
         if self.summary_worker and self.summary_worker.isRunning():
             self.summary_worker.wait()
         self.vectordb.close()

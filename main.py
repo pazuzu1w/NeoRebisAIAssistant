@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QApplication
 from dotenv import load_dotenv
 from gui import App
 import logging
+from utils import check_for_speech
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 

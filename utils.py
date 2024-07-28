@@ -6,6 +6,8 @@ from bs4 import BeautifulSoup
 import os
 
 from httpx._urlparse import urlparse
+import pyaudio
+import speech_recognition as sr
 
 import entityDB
 from entityDB import EntityDB
@@ -182,3 +184,49 @@ def read_directory(name: str):
         return "Directory 'files' not found."
 
 
+def recognize_speech_from_mic(recognizer, microphone):
+    """Transcribe speech from recorded from `microphone`."""
+    with microphone as source:
+        recognizer.adjust_for_ambient_noise(source)
+        print("Listening for commands...")
+        audio = recognizer.listen(source)
+
+    response = {"success": True, "error": None, "transcription": None}
+
+    try:
+        response["transcription"] = recognizer.recognize_google(audio)
+    except sr.RequestError:
+        response["success"] = False
+        response["error"] = "API unavailable"
+    except sr.UnknownValueError:
+        response["error"] = "Unable to recognize speech"
+
+    return response
+
+
+def check_for_speech():
+    recognizer = sr.Recognizer()
+    microphone = sr.Microphone()
+
+    while True:
+        print("Say something!")
+        result = recognize_speech_from_mic(recognizer, microphone)
+
+        if result["transcription"]:
+            print(f"You said: {result['transcription']}")
+        if not result["success"]:
+            print("I didn't catch that. What did you say?\n")
+
+        if result["error"]:
+            print(f"ERROR: {result['error']}")
+
+        # Add your command processing logic here
+        # Example:
+        if result["transcription"]:
+            command = result["transcription"].lower()
+            if "exit" in command:
+                print("Exiting...")
+                break
+            elif "hello" in command:
+                print("Hello to you too!")
+            # Add more commands as needed
