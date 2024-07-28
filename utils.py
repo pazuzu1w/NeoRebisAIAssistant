@@ -180,3 +180,5 @@ def read_directory(name: str):
     else:
         print("Directory 'files' not found.")
         return "Directory 'files' not found."
+
+

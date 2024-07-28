@@ -30,7 +30,7 @@ def get_available_models():
 
 def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
     try:
-        api_key = os.getenv('API_KEY2')
+        api_key = os.getenv('API_KEY3')
         if not api_key:
             raise ValueError("API_KEY not found in environment variables")
 
@@ -56,7 +56,7 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
                    eDB.tavily_search, eDB.read_entity, utils.google_search,
                    eDB.list_entities, utils.email, utils.surf_web, eDB.delete_entity,
                    utils.create_file, utils.read_file, utils.edit_file, utils.read_directory,
-                   pyautogui_utils.take_screenshot],
+                   pyautogui_utils.take_screenshot, pyautogui_utils.open_application],
             safety_settings=safety_settings,
             generation_config=generation_config,
             system_instruction=system_prompt

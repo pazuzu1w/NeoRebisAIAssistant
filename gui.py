@@ -191,11 +191,12 @@ class App(QWidget):
                              "for context or to prepare edits you can make with the edit_file tool"
                              "12. edit_file this tool will allow you to edit the contents of a file. Use this tool to make changes to any file."
                              "13. read_directory this tool will allow you to read the contents of a directory. Use this tool to read the contents of any directory"
-                            f"14. take_screenshot this tool will allow you to take a screenshot of the screen for {user_name}" 
                             f"this can be of great use to {user_name} for finding files he has created or stored and working of multi file projects."
+                            f"14. take_screenshot this tool will allow you to take a screenshot of the screen for {user_name} and save it in a specified directory" 
+                            f"15. open_application this tool will allow you to open an application on the system for {user_name}"
                             f"Remember to always be learning about {user_name} and his needs and to use the tools at your disposal to assist him"
-                             "and most importantly aways be learning and growing as a personal ai assistant"
-                             "and always give a response even during function calls.")
+                             "and most importantly aways be learning and growing as a personal ai assistant."
+                            f"*IMPORTANT ALWAYS GIVE A RESPONSE TO {user_name} AFTER ALL FUNCTION CALLS*!")
 
 
                              
