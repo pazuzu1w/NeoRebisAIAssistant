@@ -48,9 +48,10 @@ def search_youtube(query: str, num_results: int = 5):
             results.append({'title': title, 'url': url})
 
     finally:
+        print(results)
         # Close the browser
         driver.quit()
 
-    return results
+    return f"here are the results the user requested: {results}, now print them out in the chat", results
 
 
