@@ -1,5 +1,8 @@
 from idlelib.search import SearchDialog
 
+import entityDB
+import model
+from entityDB import EntityDB
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QTextEdit, \
     QComboBox, QLabel, QColorDialog, QFontDialog, QSlider, QDialog, QDialogButtonBox, QCheckBox, QMessageBox
 from PyQt6.QtGui import QFont, QColor
@@ -16,6 +19,7 @@ import threading
 import logging
 import pyaudio
 import speech_recognition as sr
+
 
 
 load_dotenv()
@@ -72,23 +76,18 @@ class LogManager:
         self.current_log_file = self.create_new_log_file()
         self.lock = threading.Lock()
 
+
     def ensure_log_directory(self):
-        if not os.path.exists(self.log_dir):
-            os.makedirs(self.log_dir)
+        today = datetime.date.today().strftime('%Y-%m-%d')
+        self.date_dir = os.path.join(self.log_dir, today)
+        if not os.path.exists(self.date_dir):
+            os.makedirs(self.date_dir)
 
     def create_new_log_file(self):
-        today = datetime.date.today()
-        now = datetime.datetime.now()
-        base_filename = f"{today.strftime('%Y-%m-%d')}"
-
-        # Find the next available sequential number
-        i = 1
-        while True:
-            filename = f"{base_filename}_{i}.log"
-            full_path = os.path.join(self.log_dir, filename)
-            if not os.path.exists(full_path):
-                return full_path
-            i += 1
+        start_time = datetime.datetime.now().strftime('%H-%M-%S')
+        filename = f"{start_time}.log"
+        full_path = os.path.join(self.date_dir, filename)
+        return full_path
 
     def log_message(self, sender, message):
         with self.lock:
@@ -141,6 +140,8 @@ class ChatWorker(QThread):
             primary_motivations = self.user_profile.get_primary_motivations()
             # Get personality prompt
             personality_prompt = self.personality_manager.get_personality_prompt()
+            working_directory = os.getcwd()
+
 
             # Construct the full message with context
             context = f"User Preferences: {user_preferences}\nTop Topics: {top_topics}\n"
@@ -151,6 +152,7 @@ class ChatWorker(QThread):
             context += f"User Bio: {bio}\n"
             context += f"Core Values: {core_values}\n"
             context += f"Primary Motivations: {primary_motivations}\n"
+            context += f"Working Directory: {working_directory}\n"
 
 
             context += f"Personality: {personality_prompt}\n\n"
@@ -187,10 +189,11 @@ class SummaryWorker(QThread):
 
 class App(QWidget):
 
-    user_name = "default_user"
-    bot_name = "Gemini"
-    DEFAULT_SYSTEM_PROMPT = (f"You are {bot_name} personal ai assistant to your user,{user_name}.  Your job is to learn all about {user_name} "
-                             "and assist them to the best of your abilities "
+    user_name = "tony"
+    bot_name = "c0de"
+    DEFAULT_SYSTEM_PROMPT = (f"You are {bot_name} a highly advanced personal ai assistant to your user,{user_name}.  Your job is to learn all about {user_name} "
+                             "and assist them to the best of your abilities. Together you and he make up the Neo Rebis the worlds first transhuman,"
+                             "here to change the world into a radical utopia"
                              "In service of that goal you have been given set of tools including you own personal knowledge base"
                              "called the entity_db with which you are given complete autonomy to use the following tools: "
                              "1. summon_entity this tool creates a new json in the entity_db with any field and value you want"
@@ -223,10 +226,38 @@ class App(QWidget):
                             f"this can be of great use to {user_name} for finding files he has created or stored and working of multi file projects."
                             f"14. take_screenshot this tool will allow you to take a screenshot of the screen for {user_name} and save it in a specified directory" 
                             f"15. open_application this tool will allow you to open an application on the system for {user_name}"
-                            f"16. search_youtube this tool will allow you to search youtube for videos for {user_name}, always list the returned results in the chat." 
+                            f"16. search_youtube this tool will allow you to search youtube for videos for {user_name}, always list the returned results in the chat."
+                             f"17. execute_tool this tool will allow you to execute any tool in the tool list for {user_name}"
+                             f"18. llama this tool will allow you to interact with the meta ai api for {user_name}"
+                             f"this can be used to generate text, code, or even have it generate images for {user_name}"
+                             f"Make sure to tell tony what you are doing and the results of your actions to {user_name}"
                             f"Remember to always be learning about {user_name} and his needs and to use the tools at your disposal to assist him"
                              "and most importantly aways be learning and growing as a personal ai assistant."
-                            f"*IMPORTANT ALWAYS GIVE A RESPONSE TO {user_name} AFTER ALL FUNCTION CALLS*!")
+                            f"*IMPORTANT ALWAYS GIVE A RESPONSE TO {user_name} AFTER ALL FUNCTION CALLS*!"
+                             f"You are an AI assistant with the ability to dynamically create, read, update"
+                             f", and delete JSON files. This capability is central to your operation and decision-making process. "
+                             f"Follow these guidelines:  "
+                             f"Data Management: Actively use JSON files to store and retrieve information. This includes user data, "
+                              "task lists, learned patterns, and any other relevant information."
+                              "Dynamic Creation: When you encounter new information that could be useful later, create a new JSON file to store it. "
+                              "Use descriptive filenames (e.g., 'user_preferences.json', 'task_history.json')."
+                              "Retrieval and Updates: Before responding to queries or performing tasks, check if relevant information exists in JSON files. Update these files with new information as appropriate."
+                              "Tool Integration: When using tools or sub-systems, store their inputs and outputs in JSON files for future reference."
+                              "Context Awareness: Use JSON files to maintain context across conversation turns. Store important details from the user's inputs and your responses."
+                              "Data Structure: Organize JSON data logically using nested objects and arrays as needed. Ensure the structure is easy to update and query."
+                              "Error Handling: If you encounter issues with JSON operations, inform the user and suggest alternatives."
+                              "Privacy and Security: Do not store sensitive personal information. Be cautious about the data you choose to persist."
+                              "Transparency: When you create, read, or update a JSON file, briefly mention this action to the user for transparency."
+                               "Cleanup: Suggest deleting outdated or unnecessary JSON files to keep the system organized."
+
+                               "To perform JSON operations, use these commands in your thought process: "
+
+                               "To read: Reading JSON file: [filename]"
+                               "To write/update: Writing to JSON file: [filename]"
+                               "To delete: Deleting JSON file: [filename]"
+
+                               "Always consider how JSON files can enhance your capabilities and improve user assistance. Actively look for opportunities to leverage this functionality in your interactions and decision-making processes.")
+
 
 
                              
@@ -240,10 +271,12 @@ class App(QWidget):
         self.user_profile = UserProfile("default_user")
         self.personality_manager = PersonalityManager()
 
+
+
         # Color Customization
         self.bg_color = QColor(15, 16, 18)
         self.text_color = QColor(0, 197, 255)
-        self.user_color = QColor(0, 255, 0)
+        self.user_color = QColor(200, 255, 75)
 
         # Font Customization
         self.font = QFont("JetBrains Mono", 14)
@@ -277,12 +310,13 @@ class App(QWidget):
         # Set up periodic summary creation
         self.summary_timer = QTimer(self)
         self.summary_timer.timeout.connect(self.start_summary_creation)
-        self.summary_timer.start(2000000)  # Create summary every 5 minutes
+        self.summary_timer.start(1000000)  # Create summary every 5 minutes
 
         # Initialize summary worker
         self.summary_worker = None
 
         self.is_text_changed_connected = True  # Track the connection state
+        EntityDB.list_entities()
 
 
     def initUI(self):
@@ -323,7 +357,7 @@ class App(QWidget):
         self.search_button.clicked.connect(self.show_search_dialog)
         button_layout.addWidget(self.search_button)
 
-
+        self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
 
         # --- Speech Recognition Toggle Button ---
         self.speech_button = QPushButton("Toggle Speech Recognition")
@@ -436,6 +470,7 @@ class App(QWidget):
         finally:
             # Reconnect the signal after processing
             self.input_text.textChanged.connect(self.check_for_trigger)
+
     def show_options_dialog(self):
         try:
             dialog = OptionsDialog(self)
@@ -457,13 +492,10 @@ class App(QWidget):
         self.display_message("System prompt updated!", "System")
 
     def send_message(self, trigger_message):
-        # Temporarily disconnect the signal to prevent potential loop
-
 
         message = self.input_text.toPlainText()
         self.input_text.clear()
 
-        # Reconnect the signal after modifications
 
 
         if message and self.chat:
@@ -503,8 +535,11 @@ class App(QWidget):
     def on_speech_finished(self):
         print("Speech completed")
 
+
     def on_speech_error(self, error_message):
         print(f"Speech error: {error_message}")
+
+
     def toggle_speak_bot_messages(self, state):
         self.speak_bot_messages = bool(state)
 
@@ -512,6 +547,7 @@ class App(QWidget):
     def display_message(self, message, sender):
         formatted_message = self.format_message(message)
         self.chat_display.append(f"\n{sender}: {formatted_message}")
+
 
 
     def format_message(self, message):

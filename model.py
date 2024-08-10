@@ -7,7 +7,9 @@ import pyautogui_utils
 import utils
 import webUtils
 from entityDB import EntityDB as eDB
+import meta
 load_dotenv()
+
 DEFAULT_MODEL = "models/gemini-1.5-pro-latest"
 
 
@@ -15,7 +17,7 @@ DEFAULT_MODEL = "models/gemini-1.5-pro-latest"
 
 def get_available_models():
     try:
-        api_key = os.getenv('API_KEY3')
+        api_key = os.getenv('API_KEY2')
         if not api_key:
             raise ValueError("API_KEY not found in environment variables")
 
@@ -31,7 +33,7 @@ def get_available_models():
 
 def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
     try:
-        api_key = os.getenv('API_KEY3')
+        api_key = os.getenv('API_KEY')
         if not api_key:
             raise ValueError("API_KEY not found in environment variables")
 
@@ -58,7 +60,7 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
                    eDB.list_entities, utils.email, utils.surf_web, eDB.delete_entity,
                    utils.create_file, utils.read_file, utils.edit_file, utils.read_directory,
                    pyautogui_utils.take_screenshot, pyautogui_utils.open_application,
-                   webUtils.search_youtube],
+                   webUtils.search_youtube,pyautogui_utils.execute_tool, meta.llama],
             safety_settings=safety_settings,
             generation_config=generation_config,
             system_instruction=system_prompt
