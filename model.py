@@ -17,7 +17,7 @@ DEFAULT_MODEL = "models/gemini-1.5-pro-latest"
 
 def get_available_models():
     try:
-        api_key = os.getenv('API_KEY2')
+        api_key = os.getenv('API_KEY')
         if not api_key:
             raise ValueError("API_KEY not found in environment variables")
 
@@ -50,7 +50,7 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
             "temperature": 0.9,
             "top_p": 1,
             "top_k": 1,
-            "max_output_tokens": 4000,
+            "max_output_tokens": 10000,
         }
 
         model = genai.GenerativeModel(
@@ -82,4 +82,6 @@ def send_message_async(chat, message):
     except Exception as e:
         print(f"Failed to send message: {e}")
         return None
+
+
 

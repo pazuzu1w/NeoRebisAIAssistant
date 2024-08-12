@@ -1,10 +1,12 @@
 from idlelib.search import SearchDialog
-
+import google.generativeai as genai
+from google.generativeai import caching
 import entityDB
 import model
 from entityDB import EntityDB
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QTextEdit, \
-    QComboBox, QLabel, QColorDialog, QFontDialog, QSlider, QDialog, QDialogButtonBox, QCheckBox, QMessageBox
+    QComboBox, QLabel, QColorDialog, QFontDialog, QSlider, QDialog, QDialogButtonBox, QCheckBox, QMessageBox, \
+    QFileDialog
 from PyQt6.QtGui import QFont, QColor
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QLocale, QTimer
 from model import init_model, send_message_async, get_available_models, DEFAULT_MODEL
@@ -122,7 +124,7 @@ class ChatWorker(QThread):
         self.vectordb = vectordb
         self.user_profile = user_profile
         self.personality_manager = personality_manager
-
+        self.entity_list = EntityDB.list_entities()
     def run(self):
         try:
             # Get relevant context
@@ -141,7 +143,7 @@ class ChatWorker(QThread):
             # Get personality prompt
             personality_prompt = self.personality_manager.get_personality_prompt()
             working_directory = os.getcwd()
-
+            entity_list = self.entity_list
 
             # Construct the full message with context
             context = f"User Preferences: {user_preferences}\nTop Topics: {top_topics}\n"
@@ -153,7 +155,7 @@ class ChatWorker(QThread):
             context += f"Core Values: {core_values}\n"
             context += f"Primary Motivations: {primary_motivations}\n"
             context += f"Working Directory: {working_directory}\n"
-
+            context += f"Entity List: {entity_list}\n"
 
             context += f"Personality: {personality_prompt}\n\n"
             full_message = f"{context}User message: {self.message}"
@@ -294,6 +296,7 @@ class App(QWidget):
         self.speech_worker.finished.connect(self.on_speech_finished)
         self.speech_worker.error.connect(self.on_speech_error)
 
+        self.multimodal_model = None
         self.chat = None
 
         self.current_model = DEFAULT_MODEL
@@ -316,7 +319,7 @@ class App(QWidget):
         self.summary_worker = None
 
         self.is_text_changed_connected = True  # Track the connection state
-        EntityDB.list_entities()
+
 
 
     def initUI(self):
@@ -345,6 +348,15 @@ class App(QWidget):
         input_layout.addWidget(self.send_button)
         main_layout.addLayout(input_layout)
 
+        self.file_picker_button = QPushButton("Pick File")
+        self.file_picker_button.clicked.connect(self.pick_file)
+        input_layout.addWidget(self.file_picker_button)
+
+        self.clear_file_button = QPushButton("Clear File")
+        self.clear_file_button.clicked.connect(self.clear_file)
+        input_layout.addWidget(self.clear_file_button)
+
+
         button_layout = QHBoxLayout()
 
         # --- Options Button ---
@@ -371,6 +383,20 @@ class App(QWidget):
         main_layout.addLayout(button_layout)
 
         self.update_colors()
+
+    def pick_file(self):
+        file_dialog = QFileDialog()
+        file_path, _ = file_dialog.getOpenFileName(self, "Select File")
+        if file_path:
+            self.selected_file_path = file_path
+            self.display_message(f"File selected: {os.path.basename(file_path)}", "System")
+
+
+
+    def clear_file(self):
+        if hasattr(self, 'selected_file_path'):
+            del self.selected_file_path
+            self.display_message("File cleared", "System")
 
     def on_speech_recognized(self, text):
         # Update the input box with the recognized text
@@ -503,21 +529,65 @@ class App(QWidget):
             timestamped_message = f"[{current_time}] {message}"
             self.display_message(timestamped_message, "You")
             self.log_manager.log_message("You", timestamped_message)
-            self.worker = ChatWorker(self.chat, timestamped_message, self.vectordb, self.user_profile,
-                                     self.personality_manager)
-            self.worker.finished.connect(self.process_response)
+            # Check if a file is selected
+            if hasattr(self, 'selected_file_path'):
+                try:
+                    # Upload the file
+                    uploaded_file = genai.upload_file(path=self.selected_file_path,
+                                                      display_name=os.path.basename(self.selected_file_path))
 
-            self.worker.start()
+
+
+                    self.multimodal_model = genai.GenerativeModel("models/gemini-1.5-flash-latest")
+
+                    # Generate content with both text and file
+                    response = self.multimodal_model.generate_content([uploaded_file, message])
+
+                    # Process the response
+                    self.process_response(response.text)
+                    self.chat.history.append({"role": "assistant", "content": response.text})
+                except Exception as e:
+                    self.show_error_message(f"Error processing file: {str(e)}")
+                    del self.selected_file_path
+            else:
+                # If no file is selected, proceed with text-only message
+                self.worker = ChatWorker(self.chat, timestamped_message, self.vectordb, self.user_profile,
+                                         self.personality_manager)
+                self.worker.finished.connect(self.process_response)
+                self.worker.start()
+
         if trigger_message and self.chat:
             current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             timestamped_message = f"[{current_time}] {trigger_message}"
             self.display_message(timestamped_message, "You")
             self.log_manager.log_message("You", timestamped_message)
-            self.worker = ChatWorker(self.chat, timestamped_message, self.vectordb, self.user_profile,
-                                     self.personality_manager)
-            self.worker.finished.connect(self.process_response)
+            if hasattr(self, 'selected_file_path'):
+                try:
+                    # Upload the file
+                    uploaded_file = genai.upload_file(path=self.selected_file_path,
+                                                      display_name=os.path.basename(self.selected_file_path))
 
-            self.worker.start()
+
+
+                    # Construct a GenerativeModel which uses the created cache.
+                    self.multimodal_model = genai.GenerativeModel("models/gemini-1.5-flash-latest")
+
+                    # Generate content with both text and file
+                    response = self.multimodal_model.generate_content([uploaded_file, message])
+
+                    # Process the response
+                    self.process_response(response.text)
+                    self.chat.history.append({"role": "assistant", "content": response.text})
+                    # Clear the selected file path
+                except Exception as e:
+                    self.show_error_message(f"Error processing file: {str(e)}")
+                    del self.selected_file_path
+            else:
+                # If no file is selected, proceed with text-only message
+                self.worker = ChatWorker(self.chat, timestamped_message, self.vectordb, self.user_profile,
+                                         self.personality_manager)
+                self.worker.finished.connect(self.process_response)
+                self.worker.start()
 
 
     def toggle_speak_aloud(self, state):
