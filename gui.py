@@ -1,4 +1,6 @@
 from idlelib.search import SearchDialog
+from time import sleep
+
 import google.generativeai as genai
 from entityDB import EntityDB
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QTextEdit, \
@@ -473,6 +475,8 @@ class App(QWidget):
                     # Generate content with both text and file
                     response = self.multimodal_model.generate_content([uploaded_file, message])
                     self.history.append({"role": "assistant", "content": response.text})
+                    sleep(5)
+                    self.send_from_multimodal(response)
                     # Process the response
                     self.process_response(response.text)
                 except Exception as e:
@@ -503,6 +507,7 @@ class App(QWidget):
 
                     # Generate content with both text and file
                     response = self.multimodal_model.generate_content([uploaded_file, message])
+                    sleep(5)
                     self.send_from_multimodal(response)
                     # Process the response
                     self.process_response(response.text)
@@ -535,7 +540,6 @@ class App(QWidget):
                                  self.personality_manager)
         self.worker.finished.connect(self.process_response)
         self.worker.start()
-        del self.selected_file
 
 
     def on_speech_finished(self):
