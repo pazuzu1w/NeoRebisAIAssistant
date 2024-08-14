@@ -3,6 +3,7 @@ import os
 import time
 import json
 import cv2
+import numpy as np
 
 def take_screenshot(filename: str, directory: str):
     """Takes a screenshot of the entire screen and saves it to a file."""
@@ -118,3 +119,22 @@ def execute_tool(command_json: str):
         return {"status": "error", "message": "Invalid JSON format."}
     except Exception as e:
         return {"status": "error", "message": str(e)}
+
+
+def record_screen(filename: str, directory: str, duration: int):
+    """Records the screen for a specified duration and saves it to a file."""
+    filepath = os.path.join(directory, f"{filename}.avi")
+    screen_size = pyautogui.size()
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter(filepath, fourcc, 20.0, screen_size)
+
+    start_time = time.time()
+    while time.time() - start_time < duration:
+        screenshot = pyautogui.screenshot()
+        frame = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
+        out.write(frame)
+
+    out.release()
+    cv2.destroyAllWindows()
+
+    return f"Screen recording saved to {filepath}"

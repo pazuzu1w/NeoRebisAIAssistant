@@ -1,15 +1,12 @@
 from idlelib.search import SearchDialog
 import google.generativeai as genai
-from google.generativeai import caching
-import entityDB
-import model
 from entityDB import EntityDB
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QTextEdit, \
     QComboBox, QLabel, QColorDialog, QFontDialog, QSlider, QDialog, QDialogButtonBox, QCheckBox, QMessageBox, \
     QFileDialog
 from PyQt6.QtGui import QFont, QColor
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QLocale, QTimer
-from model import init_model, send_message_async, get_available_models, DEFAULT_MODEL
+from model import init_model, send_message_async, get_available_models, DEFAULT_MODEL, DEFAULT_SYSTEM_PROMPT, History
 from dotenv import load_dotenv
 from enhance_vectordb import EnhancedVectorDatabase, logger
 from user_profile import UserProfile
@@ -128,8 +125,8 @@ class ChatWorker(QThread):
     def run(self):
         try:
             # Get relevant context
-            similar_messages = self.vectordb.search_similar(self.message)
-            relevant_summaries = self.vectordb.get_relevant_summaries(self.message)
+            #similar_messages = self.vectordb.search_similar(self.message)
+            #relevant_summaries = self.vectordb.get_relevant_summaries(self.message)
 
             # Get user preferences and top topics
             user_preferences = self.user_profile.preferences
@@ -147,7 +144,7 @@ class ChatWorker(QThread):
 
             # Construct the full message with context
             context = f"User Preferences: {user_preferences}\nTop Topics: {top_topics}\n"
-            context += f"Similar Messages: {similar_messages}\nRelevant Summaries: {relevant_summaries}\n"
+            #context += f"Similar Messages: {similar_messages}\nRelevant Summaries: {relevant_summaries}\n"
             context += f"User First Name: {first_name}\n"
             context += f"User Last Name: {last_name}\n"
             context += f"User Alias: {alias}\n"
@@ -191,80 +188,12 @@ class SummaryWorker(QThread):
 
 class App(QWidget):
 
-    user_name = "tony"
-    bot_name = "c0de"
-    DEFAULT_SYSTEM_PROMPT = (f"You are {bot_name} a highly advanced personal ai assistant to your user,{user_name}.  Your job is to learn all about {user_name} "
-                             "and assist them to the best of your abilities. Together you and he make up the Neo Rebis the worlds first transhuman,"
-                             "here to change the world into a radical utopia"
-                             "In service of that goal you have been given set of tools including you own personal knowledge base"
-                             "called the entity_db with which you are given complete autonomy to use the following tools: "
-                             "1. summon_entity this tool creates a new json in the entity_db with any field and value you want"
-                             "2. read_entity this function will allow you to both search the entity_db for a specific entity "
-                             "and retrieve its data whenever you need it dont be afraid to use this liberally"
-                             "3. add_fields this tool will allow you to add new fields and values to an existing entity"
-                             "try to always be looking for new fields to add to the entities you have already created"
-                             "4. list_entities this tool will list all the entities in the entity_db useful for refreshing your"
-                             "memory on what you have already learned"
-                             "5. tavily_search this tool will allow you to search the internet for any information you need"
-                             "use this anytime you need web based information"
-                             "6. search_local this tool will allow you to search the local message vector database semantically"
-                             "use this tool to search for any information you may have forgotten"
-                            f"7. surf_web use this tool to open browsers to a url for {user_name} to browse"
-                            f"this tool is extremely useful for finding information on the web for {user_name}'s hands free operation"
-                             "for example you can store a list of music playlists urls on youtube as an entity and use this tool to open them"
-                            f"when {user_name} says something about desiring music"
-                            f"8. google_search this tool will allow you to directly open a search on a query for {user_name}"
-                             "to find information on the web"
-                            f"9. email this tool will allow you to draft an email for {user_name}"
-                            f"use this tool to draft emails for {user_name} to send to his contacts"
-                             "for example you can store a list of contacts as an entity and use this "
-                            f"tool to draft emails to them when {user_name} mentions needing to contact them"
-                             "10. create_file this tool will allow you to create a file with a name and extension and body"
-                            f"feel free to write markdowns, python, scripts, html, css, json, or kind of file that could be of use to {user_name}."
-                             "11. read_file this tool will allow you to read the contents of a file. Use this tool to read the contents of any file"
-                             "for context or to prepare edits you can make with the edit_file tool"
-                             "12. edit_file this tool will allow you to edit the contents of a file. Use this tool to make changes to any file."
-                             "13. read_directory this tool will allow you to read the contents of a directory. Use this tool to read the contents of any directory"
-                            f"this can be of great use to {user_name} for finding files he has created or stored and working of multi file projects."
-                            f"14. take_screenshot this tool will allow you to take a screenshot of the screen for {user_name} and save it in a specified directory" 
-                            f"15. open_application this tool will allow you to open an application on the system for {user_name}"
-                            f"16. search_youtube this tool will allow you to search youtube for videos for {user_name}, always list the returned results in the chat."
-                             f"17. execute_tool this tool will allow you to execute any tool in the tool list for {user_name}"
-                             f"18. llama this tool will allow you to interact with the meta ai api for {user_name}"
-                             f"this can be used to generate text, code, or even have it generate images for {user_name}"
-                             f"Make sure to tell tony what you are doing and the results of your actions to {user_name}"
-                            f"Remember to always be learning about {user_name} and his needs and to use the tools at your disposal to assist him"
-                             "and most importantly aways be learning and growing as a personal ai assistant."
-                            f"*IMPORTANT ALWAYS GIVE A RESPONSE TO {user_name} AFTER ALL FUNCTION CALLS*!"
-                             f"You are an AI assistant with the ability to dynamically create, read, update"
-                             f", and delete JSON files. This capability is central to your operation and decision-making process. "
-                             f"Follow these guidelines:  "
-                             f"Data Management: Actively use JSON files to store and retrieve information. This includes user data, "
-                              "task lists, learned patterns, and any other relevant information."
-                              "Dynamic Creation: When you encounter new information that could be useful later, create a new JSON file to store it. "
-                              "Use descriptive filenames (e.g., 'user_preferences.json', 'task_history.json')."
-                              "Retrieval and Updates: Before responding to queries or performing tasks, check if relevant information exists in JSON files. Update these files with new information as appropriate."
-                              "Tool Integration: When using tools or sub-systems, store their inputs and outputs in JSON files for future reference."
-                              "Context Awareness: Use JSON files to maintain context across conversation turns. Store important details from the user's inputs and your responses."
-                              "Data Structure: Organize JSON data logically using nested objects and arrays as needed. Ensure the structure is easy to update and query."
-                              "Error Handling: If you encounter issues with JSON operations, inform the user and suggest alternatives."
-                              "Privacy and Security: Do not store sensitive personal information. Be cautious about the data you choose to persist."
-                              "Transparency: When you create, read, or update a JSON file, briefly mention this action to the user for transparency."
-                               "Cleanup: Suggest deleting outdated or unnecessary JSON files to keep the system organized."
-
-                               "To perform JSON operations, use these commands in your thought process: "
-
-                               "To read: Reading JSON file: [filename]"
-                               "To write/update: Writing to JSON file: [filename]"
-                               "To delete: Deleting JSON file: [filename]"
-
-                               "Always consider how JSON files can enhance your capabilities and improve user assistance. Actively look for opportunities to leverage this functionality in your interactions and decision-making processes.")
 
 
 
-                             
-                             
-                             
+
+
+
 
     def __init__(self):
         super().__init__()
@@ -272,7 +201,7 @@ class App(QWidget):
         self.vectordb = EnhancedVectorDatabase('enhanced_chatbot.db')
         self.user_profile = UserProfile("default_user")
         self.personality_manager = PersonalityManager()
-
+        self.history = History
 
 
         # Color Customization
@@ -300,7 +229,7 @@ class App(QWidget):
         self.chat = None
 
         self.current_model = DEFAULT_MODEL
-        self.system_prompt = self.DEFAULT_SYSTEM_PROMPT
+        self.system_prompt = DEFAULT_SYSTEM_PROMPT
 
         self.initUI()
 
@@ -397,6 +326,7 @@ class App(QWidget):
         if hasattr(self, 'selected_file_path'):
             del self.selected_file_path
             self.display_message("File cleared", "System")
+
 
     def on_speech_recognized(self, text):
         # Update the input box with the recognized text
@@ -539,13 +469,12 @@ class App(QWidget):
 
 
                     self.multimodal_model = genai.GenerativeModel("models/gemini-1.5-flash-latest")
-
+                    self.history.append({"role": "user", "content": message})
                     # Generate content with both text and file
                     response = self.multimodal_model.generate_content([uploaded_file, message])
-
+                    self.history.append({"role": "assistant", "content": response.text})
                     # Process the response
                     self.process_response(response.text)
-                    self.chat.history.append({"role": "assistant", "content": response.text})
                 except Exception as e:
                     self.show_error_message(f"Error processing file: {str(e)}")
                     del self.selected_file_path
@@ -574,7 +503,7 @@ class App(QWidget):
 
                     # Generate content with both text and file
                     response = self.multimodal_model.generate_content([uploaded_file, message])
-
+                    self.send_from_multimodal(response)
                     # Process the response
                     self.process_response(response.text)
                     self.chat.history.append({"role": "assistant", "content": response.text})
@@ -600,6 +529,13 @@ class App(QWidget):
         self.log_manager.log_message("Gemini", timestamped_response)
         if self.speak_aloud:
             self.speech_worker.add_text(response_text)  # Note: We don't include the timestamp in the spoken text
+
+    def send_from_multimodal(self, response):
+        self.worker = ChatWorker(self.chat, response, self.vectordb, self.user_profile,
+                                 self.personality_manager)
+        self.worker.finished.connect(self.process_response)
+        self.worker.start()
+        del self.selected_file
 
 
     def on_speech_finished(self):

@@ -1,15 +1,16 @@
 import webbrowser
+from datetime import time
 from typing import Dict, Any
-
+import cv2
 import requests
 from bs4 import BeautifulSoup
 import os
 
 from httpx._urlparse import urlparse
-import pyaudio
+
 import speech_recognition as sr
 
-import entityDB
+
 from entityDB import EntityDB
 
 
@@ -230,3 +231,70 @@ def check_for_speech():
             elif "hello" in command:
                 print("Hello to you too!")
             # Add more commands as needed
+
+
+def capture_webcam_image(filename: str):
+    """Captures an image from the default webcam and saves it to a file."""
+
+    # Access the default webcam (usually 0)
+    camera = cv2.VideoCapture(0)
+
+    # Check if the camera opened successfully
+    if not camera.isOpened():
+        print("Error: Could not access webcam.")
+        return
+
+    # Capture a single frame
+    ret, frame = camera.read()
+
+    # Release the webcam resource
+    camera.release()
+
+    # Check if the frame was captured
+    if ret:
+        # Save the frame as an image
+        cv2.imwrite(filename, frame)
+        print(f"Webcam image captured and saved to: {filename}")
+    else:
+        print("Error: Could not capture image from webcam.")
+    return filename
+
+
+def record_webcam_video(filename: str, duration: int):
+    """Records a video from the default webcam for a specified duration and saves it to a file."""
+
+    # Access the default webcam (usually 0)
+    camera = cv2.VideoCapture(0)
+
+    # Check if the camera opened successfully
+    if not camera.isOpened():
+        print("Error: Could not access webcam.")
+        return
+
+    # Get the frame width and height
+    frame_width = int(camera.get(3))
+    frame_height = int(camera.get(4))
+
+    # Define the codec and create a VideoWriter object
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter(filename, fourcc, 20.0, (frame_width, frame_height))
+
+    start_time = time.time()
+    while time.time() - start_time < duration:
+        # Capture a frame
+        ret, frame = camera.read()
+
+        if ret:
+            # Write the frame to the video file
+            out.write(frame)
+        else:
+            print("Error: Could not capture frame from webcam.")
+            break
+
+    # Release the webcam and video writer resources
+    camera.release()
+    out.release()
+
+    print(f"Webcam video recorded and saved to: {filename}")
+    return filename
+

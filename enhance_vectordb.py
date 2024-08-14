@@ -100,9 +100,9 @@ class EnhancedVectorDatabase:
         cursor = self.get_connection().cursor()
         cursor.execute('SELECT text, timestamp FROM messages ORDER BY timestamp DESC LIMIT ?', (max_messages,))
         messages = cursor.fetchall()
-
+        default_summary = "No messages to summarize"
         if not messages:
-            return None
+            return  default_summary
 
         # Combine messages into a single text
         conversation_text = " ".join([msg[0] for msg in messages])
