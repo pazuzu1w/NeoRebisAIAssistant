@@ -20,11 +20,7 @@ def initialize_app():
 
 
 
-    # ... (rest of the App class remains the same)
 
-
-
-# At the bottom of your main script file
 if __name__ == '__main__':
     print("Starting application")
     app = QApplication(sys.argv)

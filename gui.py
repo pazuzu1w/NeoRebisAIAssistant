@@ -123,13 +123,14 @@ class ChatWorker(QThread):
         self.vectordb = vectordb
         self.user_profile = user_profile
         self.personality_manager = personality_manager
-        self.entity_list = EntityDB.list_entities()
+        self.entity_db = EntityDB()
     def run(self):
         try:
             # Get relevant context
             #similar_messages = self.vectordb.search_similar(self.message)
             #relevant_summaries = self.vectordb.get_relevant_summaries(self.message)
 
+            entity_results = self.entity_db.semantic_search(self.message, top_k=3)
             # Get user preferences and top topics
             user_preferences = self.user_profile.preferences
             top_topics = self.user_profile.get_top_topics()
@@ -142,7 +143,7 @@ class ChatWorker(QThread):
             # Get personality prompt
             personality_prompt = self.personality_manager.get_personality_prompt()
             working_directory = os.getcwd()
-            entity_list = self.entity_list
+            self.entity_db = EntityDB()
 
             # Construct the full message with context
             context = f"User Preferences: {user_preferences}\nTop Topics: {top_topics}\n"
@@ -154,8 +155,11 @@ class ChatWorker(QThread):
             context += f"Core Values: {core_values}\n"
             context += f"Primary Motivations: {primary_motivations}\n"
             context += f"Working Directory: {working_directory}\n"
-            context += f"Entity List: {entity_list}\n"
+            context += "Relevant Entities:\n"
+            for result in entity_results:
+                context += f"- {result['entity_name']} (Similarity: {result['similarity']:.2f}): {result['data']}\n"
 
+            context += "\n"
             context += f"Personality: {personality_prompt}\n\n"
             full_message = f"{context}User message: {self.message}"
 
