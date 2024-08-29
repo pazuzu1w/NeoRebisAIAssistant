@@ -9,8 +9,12 @@ import webUtils
 from entityDB import EntityDB as eDB
 import meta
 load_dotenv()
+import logging
 
-DEFAULT_MODEL = "models/gemini-1.5-pro-latest"
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+DEFAULT_MODEL = "models/gemini-1.5-pro-exp-0801"
 
 user_name = "tony"
 bot_name = "c0de"
@@ -56,6 +60,7 @@ DEFAULT_SYSTEM_PROMPT = (f"You are {bot_name} a highly advanced personal ai assi
                              f"Make sure to tell tony what you are doing and the results of your actions to {user_name}"
                             f"Remember to always be learning about {user_name} and his needs and to use the tools at your disposal to assist him"
                              "and most importantly aways be learning and growing as a personal ai assistant."
+                            f"Remember you are built to be used in voice mode so keep it brief unlesss {user_name} asks for more information"
                             f"*IMPORTANT ALWAYS GIVE A RESPONSE TO {user_name} AFTER ALL FUNCTION CALLS*!"
                              f"You are an AI assistant with the ability to dynamically create, read, update"
                              f", and delete JSON files. This capability is central to your operation and decision-making process. "
@@ -85,7 +90,7 @@ History = []
 
 def get_available_models():
     try:
-        api_key = os.getenv('API_KEY2')
+        api_key = os.getenv('API_KEY3')
         if not api_key:
             raise ValueError("API_KEY not found in environment variables")
 
@@ -101,11 +106,13 @@ def get_available_models():
 
 def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
     try:
-        api_key = os.getenv('API_KEY3')
+        logger.info(f"Initializing model: {model_name}")
+        api_key = os.getenv('API_KEY')
         if not api_key:
             raise ValueError("API_KEY not found in environment variables")
 
         genai.configure(api_key=api_key)
+        logger.debug("API key configured")
 
         safety_settings = {
             HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
@@ -113,13 +120,15 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
             HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
             HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE
         }
+        logger.debug("Safety settings configured")
 
         generation_config = {
-            "temperature": 0.9,
-            "top_p": 1,
+            "temperature": 1.7,
+            "top_p": .4,
             "top_k": 1,
             "max_output_tokens": 10000,
         }
+        logger.debug("Generation config set")
 
         model = genai.GenerativeModel(
             model_name=model_name,
@@ -128,22 +137,23 @@ def init_model(model_name=DEFAULT_MODEL, system_prompt=""):
                    eDB.list_entities, utils.email, utils.surf_web, eDB.delete_entity,
                    utils.create_file, utils.read_file, utils.edit_file, utils.read_directory,
                    pyautogui_utils.take_screenshot, pyautogui_utils.open_application,
-                   webUtils.search_youtube,pyautogui_utils.execute_tool, meta.llama,
+                   webUtils.search_youtube, pyautogui_utils.execute_tool, meta.llama,
                    utils.capture_webcam_image],
             safety_settings=safety_settings,
             generation_config=generation_config,
             system_instruction=system_prompt
         )
+        logger.info(f"GenerativeModel created for {model_name}")
 
         chat = model.start_chat(history=History, enable_automatic_function_calling=True)
+        logger.info(f"Chat started for model {model_name}")
 
         print(f"Model '{model_name}' initialized successfully! 🔥")
         return chat
 
     except Exception as e:
-        print(f"Model initialization failed: {e}")
+        logger.error(f"Model initialization failed: {e}", exc_info=True)
         return None
-
 def send_message_async(chat, message):
     try:
         response = chat.send_message(message)

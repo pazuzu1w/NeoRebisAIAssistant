@@ -4,11 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="multimodal">
+    <list default="true" id="2161456d-3372-4bd9-b150-b7282ed7e8a1" name="Changes" comment="entity rag fixed">
+      <change afterPath="$PROJECT_DIR$/dalle.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gpt.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entityDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/entityDB.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meta.py" beforeDir="false" afterPath="$PROJECT_DIR$/meta.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,50 +54,54 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JavaScript Debug.www.bing.com.html.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript Debug.www.freelancer.com.html.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript Debug.www.suno.ai.html.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript Debug.www.youtube.com.html.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript Debug.www.youtube.com_watch.html.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Calc.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Gui.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.OptionsDialog.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TexDotText.executor&quot;: &quot;Run&quot;,
-    &quot;Python.enhance_vectordb.executor&quot;: &quot;Run&quot;,
-    &quot;Python.entityDB.executor&quot;: &quot;Run&quot;,
-    &quot;Python.gemini_game.executor&quot;: &quot;Run&quot;,
-    &quot;Python.gui.executor&quot;: &quot;Run&quot;,
-    &quot;Python.guiCalc.executor&quot;: &quot;Run&quot;,
-    &quot;Python.guimk2.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.meta.executor&quot;: &quot;Run&quot;,
-    &quot;Python.model.executor&quot;: &quot;Run&quot;,
-    &quot;Python.pathex.executor&quot;: &quot;Run&quot;,
-    &quot;Python.personality_system.executor&quot;: &quot;Run&quot;,
-    &quot;Python.pyautogui_utils.executor&quot;: &quot;Run&quot;,
-    &quot;Python.tDtRefactor.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.user_profile.executor&quot;: &quot;Run&quot;,
-    &quot;Python.utils.executor&quot;: &quot;Run&quot;,
-    &quot;Python.vectordb.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/pazuz/PycharmProjects/NeoRebisAIAssistant/entity_db&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JavaScript Debug.www.bing.com.html.executor": "Run",
+    "JavaScript Debug.www.freelancer.com.html.executor": "Run",
+    "JavaScript Debug.www.suno.ai.html.executor": "Run",
+    "JavaScript Debug.www.youtube.com.html.executor": "Run",
+    "JavaScript Debug.www.youtube.com_watch.html.executor": "Run",
+    "Python.Calc.executor": "Run",
+    "Python.Gui.executor": "Run",
+    "Python.Main.executor": "Run",
+    "Python.OptionsDialog.executor": "Run",
+    "Python.TexDotText.executor": "Run",
+    "Python.dalle.executor": "Run",
+    "Python.enhance_vectordb.executor": "Run",
+    "Python.entityDB.executor": "Run",
+    "Python.gemini_game.executor": "Run",
+    "Python.gpt.executor": "Run",
+    "Python.gui.executor": "Run",
+    "Python.guiCalc.executor": "Run",
+    "Python.guimk2.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.meta.executor": "Run",
+    "Python.model.executor": "Run",
+    "Python.pathex.executor": "Run",
+    "Python.personality_system.executor": "Run",
+    "Python.pyautogui_utils.executor": "Run",
+    "Python.pycalc.executor": "Run",
+    "Python.tDtRefactor.executor": "Run",
+    "Python.test.executor": "Run",
+    "Python.texdottxt.executor": "Run",
+    "Python.user_profile.executor": "Run",
+    "Python.utils.executor": "Run",
+    "Python.vectordb.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/pazuz/PycharmProjects/NeoRebisAIAssistant/entity_db",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\pazuz\PycharmProjects\NeoRebisAIAssistant\entity_db" />
@@ -141,6 +149,9 @@
       <command value="pip install meta-ai-api" />
       <command value="import pygame" />
       <command value="pip install pygame" />
+      <command value="pip install openai" />
+      <command value="pip install --upgrade openai" />
+      <command value="openai migrate" />
     </option>
   </component>
   <component name="RunManager">
@@ -176,8 +187,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.18034.82" />
-        <option value="bundled-python-sdk-975db3bf15a3-2767605e8bc2-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.18034.82" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.19072.16" />
+        <option value="bundled-python-sdk-8336bb23522e-2767605e8bc2-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.19072.16" />
       </set>
     </attachedChunks>
   </component>
@@ -217,7 +228,20 @@
       <workItem from="1723173296764" duration="7670000" />
       <workItem from="1723181500615" duration="41069000" />
       <workItem from="1723621368623" duration="20955000" />
-      <workItem from="1723741480201" duration="3029000" />
+      <workItem from="1723741480201" duration="13247000" />
+      <workItem from="1723843043935" duration="6515000" />
+      <workItem from="1724094906304" duration="12383000" />
+      <workItem from="1724122229305" duration="28050000" />
+      <workItem from="1724385674535" duration="659000" />
+      <workItem from="1724436965206" duration="3059000" />
+      <workItem from="1724468303980" duration="2292000" />
+      <workItem from="1724526568372" duration="740000" />
+      <workItem from="1724529452817" duration="5059000" />
+      <workItem from="1724627270173" duration="2350000" />
+      <workItem from="1724657867725" duration="1169000" />
+      <workItem from="1724885949282" duration="1421000" />
+      <workItem from="1724909168706" duration="9802000" />
+      <workItem from="1724932774645" duration="10708000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -563,7 +587,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723632358842</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="entity rag fixed">
+      <option name="closed" value="true" />
+      <created>1723751808866</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1723751808866</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -581,7 +613,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="personality sliders and user preferences added" />
     <MESSAGE value="gui elements refactored to seperate options screen" />
     <MESSAGE value="system prompt fixed and system config added in source" />
     <MESSAGE value="fixed display message message formatting" />
@@ -606,10 +637,18 @@
     <MESSAGE value="windows based app opening func call added" />
     <MESSAGE value="speech recognition added" />
     <MESSAGE value="multimodal" />
-    <option name="LAST_COMMIT_MESSAGE" value="multimodal" />
+    <MESSAGE value="entity rag fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="entity rag fixed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/model.py</url>
+          <line>91</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint suspend="NONE" type="python-exception">
           <properties exception="BaseException" />
@@ -621,12 +660,12 @@
     <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$TexDotText.coverage" NAME="TexDotText Coverage Results" MODIFIED="1723275919068" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../game1" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$personality_system.coverage" NAME="personality_system Coverage Results" MODIFIED="1721572513417" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$Main.coverage" NAME="Main Coverage Results" MODIFIED="1721907695676" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$gui.coverage" NAME="gui Coverage Results" MODIFIED="1724107874174" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$Gui.coverage" NAME="Gui Coverage Results" MODIFIED="1721935950833" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$gui.coverage" NAME="gui Coverage Results" MODIFIED="1723662484201" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$gemini_game.coverage" NAME="gemini_game Coverage Results" MODIFIED="1723741489406" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$main.coverage" NAME="main Coverage Results" MODIFIED="1723741508738" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$main.coverage" NAME="main Coverage Results" MODIFIED="1724565444507" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$gemini_game.coverage" NAME="gemini_game Coverage Results" MODIFIED="1724934109470" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$guimk2.coverage" NAME="guimk2 Coverage Results" MODIFIED="1723177933265" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$tDtRefactor.coverage" NAME="tDtRefactor Coverage Results" MODIFIED="1723276012569" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../game1" />
+    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$tDtRefactor.coverage" NAME="tDtRefactor Coverage Results" MODIFIED="1723851390424" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../game1" />
     <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$OptionsDialog.coverage" NAME="OptionsDialog Coverage Results" MODIFIED="1723145505245" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$Main.coverage" NAME="Main Coverage Results" MODIFIED="1721937236709" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$guiCalc.coverage" NAME="guiCalc Coverage Results" MODIFIED="1722253438458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/working_directory" />
@@ -635,14 +674,18 @@
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__Scopy$main.coverage" NAME="main Coverage Results" MODIFIED="1722110415183" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$Gui.coverage" NAME="Gui Coverage Results" MODIFIED="1721898623494" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$model.coverage" NAME="model Coverage Results" MODIFIED="1721919152042" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$pycalc.coverage" NAME="pycalc Coverage Results" MODIFIED="1723851251733" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$vectordb.coverage" NAME="vectordb Coverage Results" MODIFIED="1721392910017" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$entityDB.coverage" NAME="entityDB Coverage Results" MODIFIED="1722490378445" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$texdottxt.coverage" NAME="texdottxt Coverage Results" MODIFIED="1723846734253" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tex" />
+    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$entityDB.coverage" NAME="entityDB Coverage Results" MODIFIED="1724465835534" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$model.coverage" NAME="model Coverage Results" MODIFIED="1721754182561" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$gpt.coverage" NAME="gpt Coverage Results" MODIFIED="1724941533878" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$entityDB.coverage" NAME="entityDB Coverage Results" MODIFIED="1721779793854" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$dalle.coverage" NAME="dalle Coverage Results" MODIFIED="1724941332282" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$utils.coverage" NAME="utils Coverage Results" MODIFIED="1721954192585" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$model.coverage" NAME="model Coverage Results" MODIFIED="1723627723939" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$model.coverage" NAME="model Coverage Results" MODIFIED="1724132347115" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$main.coverage" NAME="main Coverage Results" MODIFIED="1721978197272" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$meta.coverage" NAME="meta Coverage Results" MODIFIED="1723292309563" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$meta.coverage" NAME="meta Coverage Results" MODIFIED="1724386086517" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S$guiCalc.coverage" NAME="guiCalc Coverage Results" MODIFIED="1721978771895" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/N__E__O___R__E__B__I__S_P$user_profile.coverage" NAME="user_profile Coverage Results" MODIFIED="1721575576476" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NeoRebisAIAssistant$Calc.coverage" NAME="Calc Coverage Results" MODIFIED="1723279290221" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

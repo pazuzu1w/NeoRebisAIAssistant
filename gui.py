@@ -246,9 +246,8 @@ class App(QWidget):
         self.speech_recognition_worker.start()
 
         # Set up periodic summary creation
-        self.summary_timer = QTimer(self)
-        self.summary_timer.timeout.connect(self.start_summary_creation)
-        self.summary_timer.start(1000000)  # Create summary every 5 minutes
+        self.exchange_count = 0
+        self.max_exchanges_before_summary = 10
 
         # Initialize summary worker
         self.summary_worker = None
@@ -421,7 +420,7 @@ class App(QWidget):
             self.input_text.textChanged.disconnect(self.check_for_trigger)
 
             text = self.input_text.toPlainText()
-            if text.endswith("send") or text.endswith("Send"):
+            if text.endswith("over") or text.endswith("Over"):
                 logging.debug("Trigger detected")
                 trigger_message = text[:-4] # Remove the trigger phrase
                 self.input_text.clear()
@@ -443,8 +442,12 @@ class App(QWidget):
 
 
     def on_model_changed(self, model_name):
+
         self.current_model = model_name
+        print(f"Model changed to {model_name}")
+        self.closeEvent()
         self.initialize_model_and_chat(model_name)
+        print(f"{model_name} intialized")
         self.display_message(f"Model changed to {model_name}", "System")
 
 
@@ -483,6 +486,9 @@ class App(QWidget):
                     self.send_from_multimodal(response)
                     # Process the response
                     self.process_response(response.text)
+                    self.exchange_count += 1
+                    if self.exchange_count >= self.max_exchanges_before_summary:
+                        self.start_summary_creation()
                 except Exception as e:
                     self.show_error_message(f"Error processing file: {str(e)}")
                     del self.selected_file_path
@@ -492,6 +498,9 @@ class App(QWidget):
                                          self.personality_manager)
                 self.worker.finished.connect(self.process_response)
                 self.worker.start()
+                self.exchange_count += 1
+                if self.exchange_count >= self.max_exchanges_before_summary:
+                    self.start_summary_creation()
 
         if trigger_message and self.chat:
             current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -516,6 +525,9 @@ class App(QWidget):
                     # Process the response
                     self.process_response(response.text)
                     self.chat.history.append({"role": "assistant", "content": response.text})
+                    self.exchange_count += 1
+                    if self.exchange_count >= self.max_exchanges_before_summary:
+                        self.start_summary_creation()
                     # Clear the selected file path
                 except Exception as e:
                     self.show_error_message(f"Error processing file: {str(e)}")
@@ -526,7 +538,9 @@ class App(QWidget):
                                          self.personality_manager)
                 self.worker.finished.connect(self.process_response)
                 self.worker.start()
-
+                self.exchange_count += 1
+                if self.exchange_count >= self.max_exchanges_before_summary:
+                    self.start_summary_creation()
 
     def toggle_speak_aloud(self, state):
         self.speak_aloud = bool(state)
@@ -621,23 +635,21 @@ class App(QWidget):
         self.setStyleSheet(style_sheet)
 
     def start_summary_creation(self):
-        if self.summary_worker is None or not self.summary_worker.isRunning():
-            self.summary_worker = SummaryWorker(self.vectordb)
-            self.summary_worker.summary_created.connect(self.on_summary_created)
-            self.summary_worker.error_occurred.connect(self.on_summary_error)
-            self.summary_worker.start()
+        self.summary_worker = SummaryWorker(self.vectordb)
+        self.summary_worker.summary_created.connect(self.on_summary_created)
+        self.summary_worker.error_occurred.connect(self.on_summary_error)
+        self.summary_worker.start()
 
     def on_summary_created(self, summary):
         if summary:
-            self.display_message("Created new conversation summary.", "System")
-            logger.info(f"New conversation summary created: {summary[:1000]}...")  # Log first 100 chars
-            self.worker = ChatWorker(self.chat, summary, self.vectordb, self.user_profile,
-                                     self.personality_manager)
-            self.worker.finished.connect(self.process_response)
-            self.worker.error.connect(self.handle_error)
-            self.worker.start()
+            self.chat_display.clear()
+            self.display_message("Conversation Summary:", "System")
+            self.display_message(summary, "Summary")
+            self.exchange_count = 0
+            self.history.clear()
+            self.history.add_message("system", summary)
         else:
-            logger.info("No new messages to summarize.")
+            self.display_message("No summary created.", "System")
 
     def on_summary_error(self, error):
         logger.error(f"Error creating periodic summary: {error}")

@@ -10,9 +10,6 @@ load_dotenv()
 
 
 
-def initialize_app():
-    global app_instance
-    app_instance = App()
 
 
 
@@ -25,8 +22,9 @@ if __name__ == '__main__':
     print("Starting application")
     app = QApplication(sys.argv)
     print("QApplication created")
-    initialize_app()
-    print("App instance created")
-    app_instance.show()
-    print("show() called on App instance")
+    window = App()
+    print("App created")
+    window.show()
+    print("App shown")
+    
     sys.exit(app.exec())

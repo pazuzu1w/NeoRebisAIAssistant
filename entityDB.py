@@ -227,8 +227,12 @@ class EntityDB:
                 "similarity": similarity,
                 "data": entity_data
             })
-        print(results)
-        return results
+
+        formatted_results = "\n\n".join(
+            [f"entity_name: {r['entity_name']}\nsimilarity: {r['similarity']:.2f}\ndata: {r['data']}" for r in results]
+        )
+        print(formatted_results)
+        return formatted_results
 
     @staticmethod
     def local_search(query: str):
